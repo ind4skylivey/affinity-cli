@@ -20,13 +20,13 @@ class WineManager:
     # ElementalWarrior Wine versions and download URLs
     WINE_VERSIONS = {
         "latest": {
-            "version": "9.20-staging",
+            "version": "10.18",
             "urls": {
-                "ubuntu": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "debian": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "fedora": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "arch": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "generic": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
+                "ubuntu": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-amd64.tar.xz",
+                "debian": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-amd64.tar.xz",
+                "fedora": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-amd64.tar.xz",
+                "arch": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-amd64.tar.xz",
+                "generic": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-amd64.tar.xz",
             },
         },
     }
