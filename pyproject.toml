@@ -1,0 +1,68 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "affinity-cli"
+version = "1.0.0-beta"
+description = "Universal CLI installer for Affinity products on Linux"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "ind4skylivey"}
+]
+keywords = ["affinity", "wine", "linux", "installer", "cli"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "click>=8.1.0",
+    "rich>=13.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=22.0",
+    "flake8>=5.0",
+    "mypy>=0.990",
+]
+
+[project.urls]
+Homepage = "https://github.com/yourusername/affinity-cli"
+Documentation = "https://github.com/yourusername/affinity-cli#readme"
+Repository = "https://github.com/yourusername/affinity-cli"
+"Bug Tracker" = "https://github.com/yourusername/affinity-cli/issues"
+
+[project.scripts]
+affinity-cli = "affinity_cli.main:main"
+
+[tool.setuptools]
+packages = ["affinity_cli", "affinity_cli.core", "affinity_cli.utils", "affinity_cli.commands"]
+
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --cov=affinity_cli --cov-report=term-missing"
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false

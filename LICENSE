@@ -1,0 +1,93 @@
+Personal Project License (PPL)
+
+Copyright (c) 2024 ind4skylivey
+
+TERMS AND CONDITIONS
+
+1. DEFINITIONS
+
+   "Software" refers to the Affinity CLI project and all associated code,
+   documentation, and files.
+   
+   "Author" refers to ind4skylivey, the sole creator and maintainer.
+   
+   "User" refers to any person or entity using the Software.
+
+2. GRANT OF RIGHTS
+
+   Permission is hereby granted, free of charge, to any person obtaining a copy
+   of this Software, to USE the Software without restriction, including without
+   limitation the rights to:
+   
+   - Download and install the Software
+   - Run the Software for personal or commercial purposes
+   - Study how the Software works
+   - Redistribute the Software in its original form
+
+3. RESTRICTIONS
+
+   The following restrictions apply:
+
+   a) MODIFICATION RIGHTS: Only the Author (ind4skylivey) has the right to
+      modify, adapt, merge, publish modified versions, or create derivative
+      works of the Software.
+   
+   b) NO EXTERNAL CONTRIBUTIONS: Pull requests, code contributions, and
+      implementation changes from external parties will not be accepted.
+      This is a personal project maintained solely by the Author.
+   
+   c) FEATURE REQUESTS: Users may submit feature requests and bug reports
+      through GitHub Issues, but implementation remains at the sole
+      discretion of the Author.
+   
+   d) FORKING: Users may fork the repository for personal study purposes,
+      but may not publish or distribute modified versions.
+
+4. COMMUNITY ENGAGEMENT
+
+   Users are encouraged to:
+   - Use the Software freely
+   - Report bugs and issues
+   - Request features and improvements
+   - Share their experience with the Software
+   - Promote the Software to others
+   
+   The Author will consider all feedback and may implement requested features
+   at their discretion.
+
+5. DISTRIBUTION
+
+   Redistribution of the original, unmodified Software is permitted provided
+   that:
+   
+   - This license file is included with all copies
+   - Credit is given to the original Author (ind4skylivey)
+   - No modifications are made to the Software
+   - The Software is not misrepresented as being the distributor's own work
+
+6. DISCLAIMER
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+7. TERMINATION
+
+   Any violation of these terms will result in automatic termination of the
+   rights granted under this license.
+
+---
+
+SUMMARY:
+✓ Free to use for any purpose
+✓ Free to redistribute (unmodified)
+✓ Free to report bugs and request features
+✗ No external code contributions
+✗ No modifications or derivative works
+✗ Only Author can implement changes
+
+For questions about this license, contact: ind4skylivey
+Project: https://github.com/ind4skylivey/affinity-cli
