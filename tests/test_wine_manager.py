@@ -1,10 +1,26 @@
-"""
-Unit tests for wine_manager module
-"""
+"""Unit tests for wine_manager module"""
+
+from pathlib import Path
+import io
+import tarfile
 
 import pytest
-from pathlib import Path
+
 from affinity_cli.core.wine_manager import WineManager
+
+
+def _build_tar(tmp_path, member_name, *, member_type=tarfile.REGTYPE, data=b"test"):
+    tar_path = tmp_path / "archive.tar"
+    with tarfile.open(tar_path, "w") as tar:
+        info = tarfile.TarInfo(name=member_name)
+        info.type = member_type
+        info.mtime = 0
+        if member_type in (tarfile.REGTYPE, tarfile.AREGTYPE):
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+        else:
+            tar.addfile(info)
+    return tar_path
 
 
 class TestWineManager:
@@ -57,6 +73,27 @@ class TestWineManager:
         fake_path = Path("/tmp/nonexistent.tar.xz")
         result = manager.verify_wine_integrity(fake_path)
         assert isinstance(result, bool)
+
+    def test_extract_archive_rejects_traversal(self, tmp_path):
+        """Ensure path traversal inside archives is rejected"""
+        manager = WineManager(install_dir=tmp_path / "install")
+        tar_path = _build_tar(tmp_path, "../evil.txt")
+
+        success, message = manager._extract_archive(tar_path, manager.install_dir)
+
+        assert not success
+        assert "escapes" in message
+        assert not (tmp_path / "evil.txt").exists()
+
+    def test_extract_archive_rejects_special_files(self, tmp_path):
+        """Ensure device nodes or other special files are not extracted"""
+        manager = WineManager(install_dir=tmp_path / "install")
+        tar_path = _build_tar(tmp_path, "devnode", member_type=tarfile.CHRTYPE)
+
+        success, message = manager._extract_archive(tar_path, manager.install_dir)
+
+        assert not success
+        assert "special file" in message
 
 
 if __name__ == "__main__":

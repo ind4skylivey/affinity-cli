@@ -273,6 +273,7 @@ class WineManager:
             return True, f"Extracted to {destination}"
 
         except (tarfile.TarError, OSError, ValueError) as e:
+            self._cleanup_partial_install()
             return False, f"Extraction error: {str(e)}"
 
     def _safe_extract(self, tar: tarfile.TarFile, destination: Path) -> None:
@@ -282,19 +283,39 @@ class WineManager:
 
         dest_str = str(destination_path)
 
+        safe_members = []
+
         for member in tar.getmembers():
+            if member.name is None:
+                continue
+
             member_path = destination_path / member.name
             resolved_path = member_path.resolve()
             resolved_str = str(resolved_path)
             if not (resolved_str == dest_str or resolved_str.startswith(dest_str + os.sep)):
                 raise ValueError(f"Archive member escapes destination: {member.name}")
 
+            if member.ischr() or member.isblk() or member.isfifo() or member.isdev():
+                raise ValueError(f"Archive contains unsupported special file: {member.name}")
+
             if member.islnk() or member.issym():
                 link_target = Path(member.linkname)
-                if link_target.is_absolute() or ".." in link_target.parts:
+                if link_target.is_absolute():
                     raise ValueError(f"Archive contains unsafe link: {member.name}")
 
-        tar.extractall(path=str(destination_path))
+                target_path = (member_path.parent / link_target).resolve()
+                target_str = str(target_path)
+                if ".." in link_target.parts or not (target_str == dest_str or target_str.startswith(dest_str + os.sep)):
+                    raise ValueError(f"Archive contains escaping link: {member.name}")
+
+            safe_members.append(member)
+
+        tar.extractall(path=str(destination_path), members=safe_members)
+
+    def _cleanup_partial_install(self) -> None:
+        """Remove a partially extracted Wine directory"""
+        if self.wine_dir.exists():
+            shutil.rmtree(self.wine_dir, ignore_errors=True)
 
     def _calculate_sha256(self, file_path: Path, chunk_size: int = 1024 * 1024) -> str:
         """Compute SHA256 checksum for a file"""
