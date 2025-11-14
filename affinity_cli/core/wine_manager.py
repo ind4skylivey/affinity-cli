@@ -3,8 +3,10 @@ Wine Manager Module
 Download, install, and manage ElementalWarrior Wine fork for Affinity
 """
 
+import os
 import subprocess
 import hashlib
+import tarfile
 import urllib.request
 import shutil
 from pathlib import Path
@@ -27,6 +29,11 @@ class WineManager:
                 "fedora": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
                 "arch": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
                 "generic": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
+            },
+            "checksum": {
+                "type": "sha256",
+                "source": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/SHA256SUMS",
+                "filename": "wine-9.20-staging-amd64.tar.xz",
             },
         },
     }
@@ -106,12 +113,20 @@ class WineManager:
             # Check if already downloaded
             if download_path.exists():
                 print(f"Using cached Wine: {download_path}")
-            else:
+                if not self.verify_wine_integrity(download_path):
+                    print("Cached Wine archive failed integrity check. Re-downloading...")
+                    download_path.unlink(missing_ok=True)
+
+            if not download_path.exists():
                 print(f"Downloading Wine from {url}...")
                 success, msg = self._download_file(url, download_path)
                 if not success:
                     return False, f"Download failed: {msg}"
-            
+
+            if not self.verify_wine_integrity(download_path):
+                download_path.unlink(missing_ok=True)
+                return False, "Failed to verify Wine archive integrity"
+
             # Extract archive
             print(f"Extracting Wine to {self.install_dir}...")
             success, msg = self._extract_archive(download_path, self.install_dir)
@@ -132,24 +147,23 @@ class WineManager:
     
     def verify_wine_integrity(self, file_path: Path) -> bool:
         """
-        Verify Wine archive integrity (placeholder for SHA256 verification)
-        
+        Verify Wine archive integrity using SHA256 checksums
+
         Args:
             file_path: Path to downloaded archive
-        
+
         Returns:
             True if integrity check passes
         """
-        # TODO: Implement SHA256 checksum verification
-        # For now, just check file exists and has reasonable size
         if not file_path.exists():
             return False
-        
-        file_size = file_path.stat().st_size
-        if file_size < 10_000_000:  # Less than 10MB is suspicious
+
+        expected_checksum = self._get_expected_checksum(file_path)
+        if not expected_checksum:
             return False
-        
-        return True
+
+        actual_checksum = self._calculate_sha256(file_path)
+        return actual_checksum == expected_checksum
     
     def setup_wine_binary(self) -> Tuple[bool, str]:
         """
@@ -243,43 +257,110 @@ class WineManager:
     
     def _extract_archive(self, archive_path: Path, destination: Path) -> Tuple[bool, str]:
         """
-        Extract tar.xz archive
-        
+        Extract tar.xz archive using a path-safe routine
+
         Args:
             archive_path: Path to archive file
             destination: Directory to extract to
-        
+
         Returns:
             Tuple of (success, message)
         """
         try:
-            import tarfile
-            
-            with tarfile.open(archive_path, 'r:xz') as tar:
-                tar.extractall(path=destination)
-            
+            with tarfile.open(archive_path, 'r:*') as tar:
+                self._safe_extract(tar, destination)
+
             return True, f"Extracted to {destination}"
-        
-        except ImportError:
-            # Fallback to tar command
-            try:
-                result = subprocess.run(
-                    ["tar", "-xJf", str(archive_path), "-C", str(destination)],
-                    capture_output=True,
-                    text=True,
-                    timeout=300
-                )
-                
-                if result.returncode == 0:
-                    return True, f"Extracted to {destination}"
-                else:
-                    return False, f"Extraction failed: {result.stderr}"
-            
-            except Exception as e:
-                return False, f"Extraction error: {str(e)}"
-        
-        except Exception as e:
+
+        except (tarfile.TarError, OSError, ValueError) as e:
             return False, f"Extraction error: {str(e)}"
+
+    def _safe_extract(self, tar: tarfile.TarFile, destination: Path) -> None:
+        """Safely extract archive members within destination"""
+        destination_path = Path(destination).resolve()
+        destination_path.mkdir(parents=True, exist_ok=True)
+
+        dest_str = str(destination_path)
+
+        for member in tar.getmembers():
+            member_path = destination_path / member.name
+            resolved_path = member_path.resolve()
+            resolved_str = str(resolved_path)
+            if not (resolved_str == dest_str or resolved_str.startswith(dest_str + os.sep)):
+                raise ValueError(f"Archive member escapes destination: {member.name}")
+
+            if member.islnk() or member.issym():
+                link_target = Path(member.linkname)
+                if link_target.is_absolute() or ".." in link_target.parts:
+                    raise ValueError(f"Archive contains unsafe link: {member.name}")
+
+        tar.extractall(path=str(destination_path))
+
+    def _calculate_sha256(self, file_path: Path, chunk_size: int = 1024 * 1024) -> str:
+        """Compute SHA256 checksum for a file"""
+        digest = hashlib.sha256()
+        with open(file_path, 'rb') as f:
+            while True:
+                chunk = f.read(chunk_size)
+                if not chunk:
+                    break
+                digest.update(chunk)
+        return digest.hexdigest()
+
+    def _get_expected_checksum(self, file_path: Path) -> Optional[str]:
+        """Retrieve the expected checksum for a downloaded archive"""
+        checksum_info: Optional[Dict[str, str]] = self.version_info.get("checksum")
+        if not checksum_info:
+            return None
+
+        if checksum_info.get("sha256"):
+            return checksum_info["sha256"]
+
+        source_url = checksum_info.get("source")
+        if not source_url:
+            return None
+
+        checksum_file = self._ensure_checksum_file(source_url)
+        if not checksum_file:
+            return None
+
+        expected_filename = checksum_info.get("filename") or file_path.name
+        return self._parse_checksum_file(checksum_file, expected_filename)
+
+    def _ensure_checksum_file(self, url: str) -> Optional[Path]:
+        """Download (and cache) a checksum file"""
+        checksum_dir = config.CACHE_DIR / "checksums"
+        checksum_dir.mkdir(parents=True, exist_ok=True)
+        checksum_path = checksum_dir / Path(url).name
+
+        if not checksum_path.exists():
+            success, _ = self._download_file(url, checksum_path)
+            if not success:
+                return None
+
+        return checksum_path
+
+    def _parse_checksum_file(self, checksum_file: Path, target_filename: str) -> Optional[str]:
+        """Extract the checksum for a specific filename from a checksum list"""
+        try:
+            with open(checksum_file, 'r', encoding='utf-8') as handle:
+                for line in handle:
+                    line = line.strip()
+                    if not line or line.startswith('#'):
+                        continue
+
+                    parts = line.split()
+                    if len(parts) < 2:
+                        continue
+
+                    checksum, *name_parts = parts
+                    candidate_name = " ".join(name_parts).lstrip('*')
+                    if candidate_name.endswith(target_filename):
+                        return checksum
+        except OSError:
+            return None
+
+        return None
 
 
 def check_wine_installed(wine_version: str = "latest") -> bool:

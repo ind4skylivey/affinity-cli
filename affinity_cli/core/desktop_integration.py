@@ -5,6 +5,7 @@ Create .desktop files, aliases, and system integration for Affinity products
 
 import subprocess
 import os
+import shlex
 from pathlib import Path
 from typing import Optional, Tuple, List
 import shutil
@@ -23,7 +24,7 @@ Type=Application
 Name={name}
 Comment={comment}
 Icon={icon_path}
-Exec=env WINEPREFIX="{prefix_path}" "{wine_path}" "{exe_path}" %U
+Exec={exec_command}
 Categories={categories}
 Terminal=false
 StartupNotify=true
@@ -99,13 +100,13 @@ MimeType={mime_types}
         categories = self.PRODUCT_CATEGORIES.get(product, "Graphics;")
         mime_types = self.PRODUCT_MIME_TYPES.get(product, "")
         
+        exec_command = self._build_exec_command(exe_path)
+
         desktop_content = self.DESKTOP_ENTRY_TEMPLATE.format(
             name=product_name,
             comment=f"Professional {product} editor (via Wine)",
             icon_path=icon_path,
-            prefix_path=self.prefix_path,
-            wine_path=self.wine_path,
-            exe_path=exe_path,
+            exec_command=f"{exec_command} %U",
             categories=categories,
             mime_types=mime_types,
         )
@@ -175,7 +176,7 @@ MimeType={mime_types}
         
         # Create alias command
         alias_name = f"affinity-{product}"
-        alias_command = f'env WINEPREFIX="{self.prefix_path}" "{self.wine_path}" "{exe_path}"'
+        alias_command = self._build_exec_command(exe_path)
         
         # Detect shell config files
         shell_configs = []
@@ -190,7 +191,7 @@ MimeType={mime_types}
             return False, "No shell config files found (.bashrc, .zshrc, .profile)"
         
         try:
-            alias_line = f'alias {alias_name}=\'{alias_command}\'\n'
+            alias_line = f'alias {alias_name}="{alias_command}"\n'
             
             for config_path in shell_configs:
                 # Check if alias already exists
@@ -206,9 +207,19 @@ MimeType={mime_types}
                     f.write(alias_line)
             
             return True, f"Alias '{alias_name}' created. Restart shell or run 'source ~/.bashrc'"
-        
+
         except Exception as e:
             return False, f"Failed to create alias: {str(e)}"
+
+    def _build_exec_command(self, exe_path: Path) -> str:
+        """Build a shell-safe command string to launch a product via Wine"""
+        args: List[str] = [
+            "env",
+            f"WINEPREFIX={self.prefix_path}",
+            str(self.wine_path),
+            str(exe_path),
+        ]
+        return " ".join(shlex.quote(str(arg)) for arg in args)
     
     def extract_icon(self, product: str) -> Tuple[bool, str]:
         """
