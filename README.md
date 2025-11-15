@@ -1,0 +1,721 @@
+<div align="center">
+
+![Affinity CLI Hero](.github/assets/affinity-cli-hero.png)
+
+# 🎨 Affinity CLI
+
+### **Universal Linux Installer for Affinity Products**
+
+*Professional, One-Command Installation for Creative Professionals*
+
+[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
+[![License: PPL](https://img.shields.io/badge/License-Personal%20Project-orange.svg?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/blob/master/LICENSE)
+[![Release](https://img.shields.io/badge/release-v1.0.0-green?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/releases/tag/v1.0.0)
+[![Tests](https://img.shields.io/badge/tests-27%20passing-success?style=for-the-badge&logo=github-actions)](https://github.com/ind4skylivey/affinity-cli/actions)
+[![Code Style](https://img.shields.io/badge/code%20style-black-black?style=for-the-badge)](https://github.com/psf/black)
+
+**[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Documentation](#-documentation) • [Contributing](#-contributing)**
+
+---
+
+### 🐧 **Linux users deserve professional creative tools.**
+
+</div>
+
+---
+
+## 🌟 What is Affinity CLI?
+
+**Affinity CLI** is a powerful, open-source command-line tool that **automates the complete installation** of **Affinity Photo**, **Designer**, and **Publisher** on Linux distributions. Version **v1.0.0** is the first polished milestone—distilled from months of late-night Wine experiments, community streams, and field engagements.
+
+> 📌 Everything visible here is served straight from `release/v1.0.0-clean`. To keep the release snapshot pristine, add future commits to that branch instead of `master` so the landing view stays tidy for everyone.
+
+```bash
+# One command to rule them all
+affinity-cli install
+```
+
+> **No more manual Wine configuration. No more dependency hunting. Just professional creative tools on Linux.** 🚀
+
+### 🔥 Why creators are hyped about v1.0.0
+
+- **Battle-tested automation** – the same playbook we ran internally is now a single `affinity-cli install` command.
+- **Cross-distro parity** – Ubuntu, Fedora, Arch, SUSE, and more all follow the exact same installer story.
+- **Confidence-first UX** – installer discovery, verbose status, and `--dry-run` show every step before touching a Wine prefix.
+
+<div align="center">
+
+### ✨ **Transform your Linux system into a creative powerhouse**
+
+_New hero artwork highlights the v1.0.0 release energy—swap the file at `.github/assets/affinity-cli-hero.png` whenever you refresh the brand._
+
+</div>
+
+---
+
+## 🎯 Features
+
+<table>
+<tr>
+<td width="33%" align="center">
+
+### 🐧 Universal Support
+Auto-detects **15+ distros**  
+Debian • Fedora • Arch • SUSE
+
+</td>
+<td width="33%" align="center">
+
+### ⚡ Full Automation
+One command installs  
+**everything** you need
+
+</td>
+<td width="33%" align="center">
+
+### 🍷 Smart Wine Setup
+Optimized configuration  
+with **.NET Framework**
+
+</td>
+</tr>
+<tr>
+<td width="33%" align="center">
+
+### 🎨 Desktop Integration
+Menu entries, aliases,  
+**native experience**
+
+</td>
+<td width="33%" align="center">
+
+### 💻 Beautiful CLI
+Rich progress bars  
+and **clear messages**
+
+</td>
+<td width="33%" align="center">
+
+### ✅ Well-Tested
+27 unit tests  
+**100% passing**
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🖼️ Supported Products
+
+<div align="center">
+
+| Product | Versions | Status |
+|:-------:|:--------:|:------:|
+| 📸 **Affinity Photo** | v1 • v2 • v3 | ✅ Supported |
+| 🎨 **Affinity Designer** | v1 • v2 • v3 | ✅ Supported |
+| 📄 **Affinity Publisher** | v1 • v2 • v3 | ✅ Supported |
+
+</div>
+
+---
+
+## 🚀 Quick Start
+
+### ⚡ Installation (3 simple steps)
+
+```bash
+# 1️⃣ Clone the repository
+git clone https://github.com/ind4skylivey/affinity-cli.git
+cd affinity-cli
+
+# 2️⃣ Install the CLI tool
+pip install -e .
+
+# 3️⃣ Check your system status
+affinity-cli status
+```
+
+### 🎬 Launch Affinity Products
+
+```bash
+# Install Affinity products (interactive mode)
+affinity-cli install
+
+# Or specify installer location
+affinity-cli install --installer-path ~/Downloads
+```
+
+### 🎉 That's it! Launch from:
+
+```bash
+# Terminal
+affinity-photo          # Launch Affinity Photo
+affinity-designer       # Launch Affinity Designer
+affinity-publisher      # Launch Affinity Publisher
+
+# Or from your application menu! 🎨
+```
+
+
+> In under five minutes you can go from a clean Linux install to launching Affinity as if it shipped with your distro. That same moment of disbelief people share on streams and meetups? This workflow makes it repeatable.
+
+---
+
+## 🐧 Supported Distributions
+
+<div align="center">
+
+<table>
+<tr>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/ubuntu/ubuntu-original.svg" width="64" height="64" alt="Ubuntu"/>
+<br><b>Ubuntu</b>
+<br>20.04 • 22.04 • 24.04
+</td>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/debian/debian-original.svg" width="64" height="64" alt="Debian"/>
+<br><b>Debian</b>
+<br>11 • 12 (Bookworm)
+</td>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg" width="64" height="64" alt="Fedora"/>
+<br><b>Fedora</b>
+<br>38 • 39 • 40+
+</td>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg" width="64" height="64" alt="Arch Linux"/>
+<br><b>Arch Linux</b>
+<br>Rolling Release
+</td>
+</tr>
+<tr>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="64" height="64" alt="Linux Mint"/>
+<br><b>Linux Mint</b>
+<br>20.x • 21.x
+</td>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="64" height="64" alt="Manjaro"/>
+<br><b>Manjaro</b>
+<br>All versions
+</td>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opensuse/opensuse-original.svg" width="64" height="64" alt="openSUSE"/>
+<br><b>openSUSE</b>
+<br>Leap • Tumbleweed
+</td>
+<td align="center" width="25%">
+<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="64" height="64" alt="More Distros"/>
+<br><b>More!</b>
+<br>Pop!_OS • Elementary
+</td>
+</tr>
+</table>
+
+</div>
+
+---
+
+## 💎 Why Choose Affinity CLI?
+
+<div align="center">
+
+### 🆚 **Comparison with Alternatives**
+
+</div>
+
+| Feature | 🎨 Affinity CLI | Lutris | Bottles | Manual Wine |
+|---------|:--------------:|:------:|:-------:|:-----------:|
+| **One-command install** | ✅ | ❌ | ❌ | ❌ |
+| **Auto distro detection** | ✅ | ❌ | ❌ | ❌ |
+| **Auto dependency install** | ✅ | ❌ | ❌ | ❌ |
+| **Desktop integration** | ✅ | ✅ | ✅ | ❌ |
+| **No external managers** | ✅ | ❌ | ❌ | ✅ |
+| **Lightweight** | ✅ | ❌ | ❌ | ✅ |
+| **Built for Affinity** | ✅ | ❌ | ❌ | ❌ |
+| **CLI + GUI launcher** | ✅ | ✅ | ✅ | ❌ |
+| **Open source** | ✅ | ✅ | ✅ | ✅ |
+
+<div align="center">
+
+### 🏆 **Affinity CLI = Best of all worlds**
+
+</div>
+
+---
+
+## 📚 Documentation
+
+<details>
+<summary>📖 <b>Installation Methods</b></summary>
+
+### From Source (Development)
+```bash
+git clone https://github.com/ind4skylivey/affinity-cli.git
+cd affinity-cli
+pip install -e .
+```
+
+### From PyPI (Coming Soon)
+```bash
+pip install affinity-cli
+```
+
+### From AUR (Arch Users - Coming Soon)
+```bash
+yay -S affinity-cli
+```
+
+</details>
+
+<details>
+<summary>⚙️ <b>Command Reference</b></summary>
+
+### Installation Commands
+
+```bash
+# Interactive installation
+affinity-cli install
+
+# Specify installer path
+affinity-cli install --installer-path ~/Downloads
+
+# Install specific products
+affinity-cli install --products photo,designer
+
+# Custom Wine prefix
+affinity-cli install --prefix ~/.my-affinity
+
+# Skip dependency check (advanced)
+affinity-cli install --skip-dependencies
+```
+
+### Management Commands
+
+```bash
+# Check system status
+affinity-cli status
+affinity-cli status --verbose
+
+# Repair broken installation
+affinity-cli repair
+affinity-cli repair --product photo
+
+# Uninstall products
+affinity-cli uninstall
+affinity-cli uninstall --purge  # Complete removal
+
+# Generate system report
+affinity-cli report
+affinity-cli report --output report.json
+```
+
+### Information Commands
+
+```bash
+# Show version
+affinity-cli --version
+
+# Show help
+affinity-cli --help
+affinity-cli install --help
+
+# Welcome message
+affinity-cli welcome
+```
+
+</details>
+
+<details>
+<summary>🔧 <b>Advanced Configuration</b></summary>
+
+### Custom Configuration File
+
+Location: `~/.config/affinity-cli/config.yml`
+
+```yaml
+wine:
+  version: "latest"
+  prefix_path: "~/.wine-affinity"
+  graphics_api: "vulkan"
+
+affinity:
+  products:
+    - photo
+    - designer
+  auto_detect_installers: true
+
+system:
+  enable_multiarch: true
+  install_dependencies: true
+```
+
+</details>
+
+<details>
+<summary>🐛 <b>Troubleshooting</b></summary>
+
+### Common Issues
+
+**Issue: Installation fails on dependency step**
+```bash
+# Update package lists first
+sudo apt update      # Ubuntu/Debian
+sudo dnf update      # Fedora
+sudo pacman -Sy      # Arch
+```
+
+**Issue: Products don't appear in menu**
+```bash
+# Rebuild desktop database
+affinity-cli repair
+```
+
+**Issue: Wine prefix creation hangs**
+```bash
+# Kill wine processes and retry
+pkill wine
+affinity-cli repair
+```
+
+**Performance issues?**
+- Check GPU drivers: `vulkaninfo`
+- Monitor resources: `htop`
+- See logs: `~/.config/affinity-cli/logs/`
+
+</details>
+
+---
+
+## 🛠️ How It Works
+
+<div align="center">
+
+```mermaid
+graph LR
+    A[🚀 Start] --> B[🐧 Detect Distro]
+    B --> C[📦 Install Dependencies]
+    C --> D[🍷 Setup Wine]
+    D --> E[⚙️ Create Prefix]
+    E --> F[🎨 Install Affinity]
+    F --> G[🖥️ Desktop Integration]
+    G --> H[✅ Done!]
+    
+    style A fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style H fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style B fill:#2196F3,stroke:#1565C0,color:#fff
+    style C fill:#FF9800,stroke:#E65100,color:#fff
+    style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style E fill:#F44336,stroke:#C62828,color:#fff
+    style F fill:#E91E63,stroke:#AD1457,color:#fff
+    style G fill:#00BCD4,stroke:#00838F,color:#fff
+```
+
+</div>
+
+### 🔄 Installation Pipeline
+
+1. **🐧 Detection Phase** - Identifies your Linux distro and package manager
+2. **📦 Preparation Phase** - Installs system dependencies (wine, libraries, fonts)
+3. **🍷 Wine Setup Phase** - Downloads and configures optimized Wine build
+4. **⚙️ Configuration Phase** - Creates isolated Wine prefix with .NET Framework
+5. **🎨 Installation Phase** - Silently installs Affinity products
+6. **🖥️ Integration Phase** - Creates menu entries and bash aliases
+7. **✅ Verification Phase** - Tests installation and generates report
+
+---
+
+## 🎯 Requirements
+
+<table>
+<tr>
+<td width="50%">
+
+### 💻 System Requirements
+
+- **OS:** Linux (any major distro)
+- **Python:** 3.8 or higher
+- **RAM:** 4GB minimum (8GB recommended)
+- **Disk:** ~5GB free space
+- **Network:** Internet connection
+
+</td>
+<td width="50%">
+
+### 📥 What You Need
+
+- **Affinity Installers** (.exe files)
+  - Purchase from [affinity.serif.com](https://affinity.serif.com/)
+- **Valid License** from Serif
+- **sudo access** (for dependencies)
+
+</td>
+</tr>
+</table>
+
+---
+
+## 🏗️ Project Architecture
+
+<details>
+<summary>📂 <b>Click to view project structure</b></summary>
+
+```
+affinity-cli/
+├── 📦 affinity_cli/          # Main package
+│   ├── 🧠 core/               # Core functionality
+│   │   ├── distro_detector.py     # OS detection
+│   │   ├── dependency_manager.py  # Package management
+│   │   ├── wine_manager.py        # Wine setup
+│   │   ├── prefix_manager.py      # Wine prefix config
+│   │   ├── affinity_installer.py  # Product installation
+│   │   └── desktop_integration.py # Desktop entries
+│   │
+│   ├── 🎮 commands/           # CLI commands
+│   │   ├── install.py         # Install command
+│   │   ├── status.py          # Status command
+│   │   ├── uninstall.py       # Uninstall command
+│   │   ├── repair.py          # Repair command
+│   │   └── report.py          # Report command
+│   │
+│   └── 🛠️ utils/              # Utilities
+│       └── logger.py          # Logging
+│
+├── 🧪 tests/                  # Unit tests (27 passing)
+├── 🤖 .github/workflows/      # CI/CD automation
+├── 📖 README.md               # This file
+├── 📜 LICENSE                 # MIT License
+└── 🤝 CONTRIBUTING.md         # Contribution guide
+```
+
+**Code Statistics:**
+- 📊 **~2,800 lines** of Python code
+- ✅ **27 unit tests** (all passing)
+- 📦 **6 core modules**
+- 🎮 **5 CLI commands**
+- 📚 **4 documentation files**
+
+</details>
+
+---
+
+## 🤝 Contributing
+
+We ❤️ contributions! This project thrives on community support.
+
+<div align="center">
+
+### 🌟 **How You Can Help**
+
+</div>
+
+<table>
+<tr>
+<td align="center" width="33%">
+
+### 🐛 Report Bugs
+Found an issue?  
+[Open an issue](https://github.com/ind4skylivey/affinity-cli/issues)
+</td>
+<td align="center" width="33%">
+
+### 💻 Write Code
+Submit pull requests  
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+</td>
+<td align="center" width="33%">
+
+### 🧪 Test & Feedback
+Try on different distros  
+Share your experience
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+
+### 📖 Improve Docs
+Help others learn  
+Update documentation
+</td>
+<td align="center" width="33%">
+
+### ⭐ Star the Repo
+Show your support  
+Help us grow!
+</td>
+<td align="center" width="33%">
+
+### 📣 Spread the Word
+Tell other Linux users  
+Share on social media
+</td>
+</tr>
+</table>
+
+### 🚀 Quick Contribution Setup
+
+```bash
+# Fork and clone
+git clone https://github.com/yourusername/affinity-cli.git
+cd affinity-cli
+
+# Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
+
+# Install in dev mode
+pip install -e ".[dev]"
+
+# Run tests
+pytest tests/ -v
+
+# Make changes and submit PR! 🎉
+```
+
+---
+
+## 📊 Project Stats
+
+<div align="center">
+
+![GitHub stars](https://img.shields.io/github/stars/ind4skylivey/affinity-cli?style=social)
+![GitHub forks](https://img.shields.io/github/forks/ind4skylivey/affinity-cli?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/ind4skylivey/affinity-cli?style=social)
+
+![GitHub issues](https://img.shields.io/github/issues/ind4skylivey/affinity-cli?style=flat-square)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/ind4skylivey/affinity-cli?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/ind4skylivey/affinity-cli?style=flat-square)
+
+</div>
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+**Important:** This project is not affiliated with Serif Labs (makers of Affinity). It's a community-driven effort to enable Affinity products on Linux.
+
+---
+
+## 🙏 Acknowledgments
+
+<div align="center">
+
+**Special Thanks To:**
+
+🍷 **Wine Project** - For making Windows apps run on Linux  
+🎨 **Serif Labs** - For creating amazing Affinity products  
+🐧 **Linux Community** - For continuous support and testing  
+⚡ **ElementalWarrior** - For Affinity-optimized Wine builds  
+
+</div>
+
+---
+
+## 💬 Community & Support
+
+<div align="center">
+
+### 🔗 **Connect With Us**
+
+[![GitHub Issues](https://img.shields.io/badge/GitHub-Issues-red?style=for-the-badge&logo=github)](https://github.com/ind4skylivey/affinity-cli/issues)
+[![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-green?style=for-the-badge&logo=github)](https://github.com/ind4skylivey/affinity-cli/discussions)
+[![Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?style=for-the-badge&logo=twitter)](https://twitter.com/ind4skylivey)
+
+</div>
+
+### 📬 Get Help
+
+- 💬 **GitHub Discussions** - Ask questions, share ideas
+- 🐛 **GitHub Issues** - Report bugs, request features
+- 📧 **Email** - For private inquiries
+- 🌐 **Reddit** - r/linux, r/linuxgaming, r/AffinityPhoto
+
+---
+
+## 🎨 Vision & Mission
+
+<div align="center">
+
+> ### *"Linux users deserve professional creative tools. This project proves it's possible."*
+
+</div>
+
+### 🎯 Our Goals
+
+1. 🚀 **Make Affinity installation effortless** for Linux users
+2. 📊 **Demonstrate demand** for official Linux support from Serif
+3. 🤝 **Build a community** around professional Linux creative tools
+4. 🌟 **Inspire** official Affinity Linux support
+
+---
+
+## 🗺️ Roadmap
+
+<details>
+<summary>🔮 <b>Future Plans</b></summary>
+
+### ✅ Completed (v1.0.0-beta)
+- [x] Core installation system
+- [x] Multi-distro support
+- [x] Desktop integration
+- [x] CLI interface
+- [x] Unit tests & CI/CD
+
+### 🚧 In Progress (v1.1.0)
+- [ ] PyPI publication
+- [ ] Extended distro testing
+- [ ] Performance optimizations
+- [ ] Enhanced error messages
+
+### 🔮 Planned (v2.0.0)
+- [ ] GUI installer option
+- [ ] Flatpak/Snap packages
+- [ ] AUR package (Arch)
+- [ ] GPU-specific optimizations
+- [ ] Proton support (experimental)
+- [ ] Multi-language support
+
+### 🌟 Dream Features
+- [ ] Official Serif collaboration
+- [ ] Native Linux Affinity (one day!)
+
+</details>
+
+---
+
+## 🌈 Show Your Support
+
+<div align="center">
+
+### ⭐ **Star this repo** if Affinity CLI helped you!
+
+### 🔄 **Share** with other Linux creative professionals
+
+### 💬 **Tell Serif** that Linux users exist and we want official support!
+
+<br>
+
+**Together, we can make Linux a first-class platform for creative professionals.** 🐧🎨
+
+<br>
+
+[![Star History Chart](https://api.star-history.com/svg?repos=ind4skylivey/affinity-cli&type=Date)](https://star-history.com/#ind4skylivey/affinity-cli&Date)
+
+---
+
+<br>
+
+### 🚀 **Ready to revolutionize Linux creative workflows?**
+
+**[Get Started Now ⬆️](#-quick-start)** | **[View Releases 📦](https://github.com/ind4skylivey/affinity-cli/releases)** | **[Report Issues 🐛](https://github.com/ind4skylivey/affinity-cli/issues)**
+
+<br>
+
+Made with ❤️ by **[ind4skylivey](https://github.com/ind4skylivey)** and the **Linux community**
+
+**Make Serif notice. Make Windows jealous. Make Linux creators powerful.** 🔥
+
+</div>
