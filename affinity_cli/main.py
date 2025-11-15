@@ -1,152 +1,205 @@
-#!/usr/bin/env python3
-"""
-Affinity CLI - Main Entry Point
-Complete CLI tool for installing Affinity products on Linux
-"""
+"""CLI entry point for affinity-cli."""
 
-import sys
+from __future__ import annotations
+
+from pathlib import Path
+from typing import List, Optional, cast
+
 import click
 from rich.console import Console
-from rich.panel import Panel
+from rich.table import Table
 
 from affinity_cli import __version__
+from affinity_cli.config import ConfigLoader, UserConfig
+from affinity_cli.installer_discovery import (
+    InstallerDiscovery,
+    InstallerInfo,
+    PRODUCT_NAMES,
+    VersionLiteral,
+)
+from affinity_cli.wine import WineExecutor
 
 console = Console()
 
 
+def _resolve_config(
+    loader: ConfigLoader,
+    installers_path: Optional[str],
+    wine_prefix: Optional[str],
+    default_version: Optional[str],
+) -> UserConfig:
+    config = loader.load()
+    overrides = {}
+    if installers_path:
+        overrides["installers_path"] = Path(installers_path)
+    if wine_prefix:
+        overrides["wine_prefix"] = Path(wine_prefix)
+    if default_version:
+        overrides["default_version"] = default_version.lower()
+    if overrides:
+        config = config.with_overrides(**overrides)
+    config.validate()
+    return config
+
+
 @click.group()
 @click.version_option(version=__version__, prog_name="affinity-cli")
-@click.option("--verbose", "-v", is_flag=True, help="Enable verbose output")
+@click.option(
+    "--config",
+    "config_file",
+    type=click.Path(path_type=Path),
+    help="Path to a custom configuration file",
+)
 @click.pass_context
-def cli(ctx, verbose):
-    """
-    🎨 Affinity CLI - Professional Install Tool for Linux
-    
-    Install Affinity Photo, Designer, and Publisher on any Linux distribution
-    with a single, powerful command.
-    """
+def cli(ctx: click.Context, config_file: Optional[Path]) -> None:
+    """Install Affinity Photo, Designer, and Publisher with one command."""
+
+    loader = ConfigLoader(config_file=config_file) if config_file else ConfigLoader()
     ctx.ensure_object(dict)
-    ctx.obj["verbose"] = verbose
+    ctx.obj["config_loader"] = loader
 
 
-@cli.command()
-@click.option("--products", "-p", default="", help="Products to install (photo,designer,publisher)")
-@click.option("--installer-path", "-i", type=click.Path(exists=True), help="Path to installer directory")
-@click.option("--wine-version", "-w", default="latest", help="Wine version to use")
-@click.option("--prefix", type=click.Path(), help="Custom Wine prefix path")
-@click.option("--skip-dependencies", is_flag=True, help="Skip dependency installation")
-@click.option("--skip-multiarch", is_flag=True, help="Skip multiarch setup")
+@cli.command("list-installers")
+@click.option("--installers-path", type=click.Path(path_type=Path), help="Override installer path")
 @click.pass_context
-def install(ctx, products, installer_path, wine_version, prefix, skip_dependencies, skip_multiarch):
-    """Install Affinity products"""
-    from affinity_cli.commands.install import run_install
-    
-    verbose = ctx.obj.get("verbose", False)
-    
-    run_install(
-        products=products.split(",") if products else [],
-        installer_path=installer_path,
-        wine_version=wine_version,
-        prefix_path=prefix,
-        skip_dependencies=skip_dependencies,
-        skip_multiarch=skip_multiarch,
-        verbose=verbose
+def list_installers(ctx: click.Context, installers_path: Optional[Path]) -> None:
+    """List discovered installers."""
+
+    config = _resolve_config(
+        ctx.obj["config_loader"],
+        installers_path=str(installers_path) if installers_path else None,
+        wine_prefix=None,
+        default_version=None,
     )
+    discovery = InstallerDiscovery(config.installers_path)
+    summary = discovery.summary()
+    table = Table(title="Available installers", show_lines=True)
+    table.add_column("Product")
+    table.add_column("Version")
+    table.add_column("File")
+    any_found = False
+    for product, entries in summary.items():
+        if not entries:
+            table.add_row(PRODUCT_NAMES[product], "-", "(not found)")
+            continue
+        any_found = True
+        for installer in entries:
+            table.add_row(
+                PRODUCT_NAMES[product],
+                f"{installer.version.upper()} ({installer.file_version})",
+                installer.path.name,
+            )
+    console.print(table)
+    if not any_found:
+        console.print(
+            f"[yellow]No installers detected in {config.installers_path}."
+            " Place official Affinity installers inside this directory.[/yellow]"
+        )
 
 
-@cli.command()
+def _parse_targets(target: str) -> List[str]:
+    if target == "all":
+        return list(PRODUCT_NAMES.keys())
+    return [target]
+
+
+@cli.command("install")
+@click.argument(
+    "target",
+    type=click.Choice(["photo", "designer", "publisher", "all"], case_sensitive=False),
+)
+@click.option("--version", "preferred_version", type=click.Choice(["v1", "v2"]))
+@click.option("--installers-path", type=click.Path(path_type=Path))
+@click.option("--prefix", "wine_prefix", type=click.Path(path_type=Path))
+@click.option("--silent", is_flag=True, help="Attempt silent install")
+@click.option("--dry-run", is_flag=True, help="Show actions without executing")
 @click.pass_context
-def status(ctx):
-    """Check installation status and system information"""
-    from affinity_cli.commands.status import run_status
-    
-    verbose = ctx.obj.get("verbose", False)
-    run_status(verbose=verbose)
+def install_command(
+    ctx: click.Context,
+    target: str,
+    preferred_version: Optional[str],
+    installers_path: Optional[Path],
+    wine_prefix: Optional[Path],
+    silent: bool,
+    dry_run: bool,
+) -> None:
+    """Install one or more Affinity products."""
 
-
-@cli.command()
-@click.option("--product", "-p", help="Product to repair (photo, designer, publisher)")
-@click.pass_context
-def repair(ctx, product):
-    """Repair broken installation"""
-    from affinity_cli.commands.repair import run_repair
-    
-    verbose = ctx.obj.get("verbose", False)
-    run_repair(product=product, verbose=verbose)
-
-
-@cli.command()
-@click.option("--products", "-p", help="Products to uninstall (comma-separated)")
-@click.option("--purge", is_flag=True, help="Remove everything including Wine prefix")
-@click.pass_context
-def uninstall(ctx, products, purge):
-    """Uninstall Affinity products"""
-    from affinity_cli.commands.uninstall import run_uninstall
-    
-    verbose = ctx.obj.get("verbose", False)
-    product_list = products.split(",") if products else []
-    
-    run_uninstall(products=product_list, purge=purge, verbose=verbose)
-
-
-@cli.command()
-@click.option("--output", "-o", type=click.Path(), help="Output file path")
-@click.pass_context
-def report(ctx, output):
-    """Generate system report"""
-    from affinity_cli.commands.report import run_report
-    
-    verbose = ctx.obj.get("verbose", False)
-    run_report(output_path=output, verbose=verbose)
-
-
-@cli.command()
-def welcome():
-    """Show welcome message and project info"""
-    welcome_text = f"""
-[bold cyan]AFFINITY CLI - Linux Installation Toolkit[/bold cyan]
-
-[yellow]Version:[/yellow] {__version__}
-[yellow]Purpose:[/yellow] Universal Affinity product installation on Linux
-
-[bold green]Quick Start:[/bold green]
-
-1. [cyan]affinity-cli install[/cyan]
-   Complete installation with all dependencies
-
-2. [cyan]affinity-cli status[/cyan]
-   Check current installation status
-
-3. [cyan]affinity-cli uninstall[/cyan]
-   Clean uninstall of products
-
-[bold magenta]🔗 Community & Support:[/bold magenta]
-GitHub: https://github.com/yourusername/affinity-cli
-Docs: https://affinity-cli.readthedocs.io/
-
-[dim]Use --help with any command for detailed options[/dim]
-    """
-    
-    panel = Panel(
-        welcome_text,
-        title="[bold]Welcome to Affinity CLI[/bold]",
-        expand=False,
-        border_style="cyan"
+    config = _resolve_config(
+        ctx.obj["config_loader"],
+        installers_path=str(installers_path) if installers_path else None,
+        wine_prefix=str(wine_prefix) if wine_prefix else None,
+        default_version=preferred_version,
     )
-    console.print(panel)
+    discovery = InstallerDiscovery(config.installers_path)
+    executor = WineExecutor(config.wine_prefix)
+    targets = _parse_targets(target)
+    forced_version: Optional[VersionLiteral] = None
+    if preferred_version:
+        forced_version = cast(VersionLiteral, preferred_version)
+    elif config.default_version == "v1":
+        forced_version = "v1"
+
+    for product in targets:
+        try:
+            installer = discovery.select_installer(product, forced_version)
+        except FileNotFoundError as exc:
+            raise click.ClickException(str(exc)) from exc
+        _run_installer(product, installer, executor, silent=silent, dry_run=dry_run)
 
 
-def main():
-    """Main entry point"""
-    try:
-        cli(obj={})
-    except KeyboardInterrupt:
-        console.print("\n[red]Operation cancelled by user[/red]")
-        sys.exit(1)
-    except Exception as e:
-        console.print(f"[red]Error: {str(e)}[/red]", style="bold")
-        sys.exit(1)
+def _run_installer(
+    product: str,
+    installer: InstallerInfo,
+    executor: WineExecutor,
+    silent: bool,
+    dry_run: bool,
+) -> None:
+    console.print(
+        f"[green]Installing {PRODUCT_NAMES[product]} using {installer.path.name} ({installer.version.upper()}).[/green]"
+    )
+    executor.run_installer(installer.path, silent=silent, dry_run=dry_run)
+    console.print(f"[bold green]Finished {PRODUCT_NAMES[product]} installation.[/bold green]")
 
 
-if __name__ == "__main__":
+@cli.command("status")
+@click.option("--installers-path", type=click.Path(path_type=Path))
+@click.option("--prefix", "wine_prefix", type=click.Path(path_type=Path))
+@click.pass_context
+def status(ctx: click.Context, installers_path: Optional[Path], wine_prefix: Optional[Path]) -> None:
+    """Show configuration and discovery status."""
+
+    config = _resolve_config(
+        ctx.obj["config_loader"],
+        installers_path=str(installers_path) if installers_path else None,
+        wine_prefix=str(wine_prefix) if wine_prefix else None,
+        default_version=None,
+    )
+    discovery = InstallerDiscovery(config.installers_path)
+    console.print("[bold underline]Configuration[/bold underline]")
+    console.print(f"Installers path: {config.installers_path} ({_exists_label(config.installers_path)})")
+    console.print(f"Wine prefix: {config.wine_prefix} ({_exists_label(config.wine_prefix)})")
+    console.print(f"Default version preference: {config.default_version.upper()}")
+    console.print()
+    table = Table(title="Installer inventory", show_lines=True)
+    table.add_column("Product")
+    table.add_column("Details")
+    for product, entries in discovery.summary().items():
+        if entries:
+            summary = ", ".join(f"{inst.version.upper()}-{inst.file_version}" for inst in entries)
+        else:
+            summary = "missing"
+        table.add_row(PRODUCT_NAMES[product], summary)
+    console.print(table)
+
+
+def _exists_label(path: Path) -> str:
+    return "exists" if path.exists() else "missing"
+
+
+def main() -> None:
+    cli(obj={})
+
+
+if __name__ == "__main__":  # pragma: no cover
     main()
