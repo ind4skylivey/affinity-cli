@@ -7,11 +7,11 @@ import subprocess
 import os
 from pathlib import Path
 from typing import Optional, Tuple, List, Dict
-import re
 
 from affinity_cli import config
-from affinity_cli.core.wine_manager import WineManager
+from affinity_cli.core.installer_scanner import InstallerScanner
 from affinity_cli.core.prefix_manager import PrefixManager
+from affinity_cli.core.wine_manager import WineManager
 
 
 class AffinityInstaller:
@@ -43,7 +43,11 @@ class AffinityInstaller:
         
         self.prefix_manager = PrefixManager(prefix_path=self.prefix_path, wine_manager=self.wine_manager)
     
-    def detect_installer(self, search_path: Path) -> Dict[str, Optional[Path]]:
+    def detect_installer(
+        self,
+        search_path: Path,
+        version: str = config.DEFAULT_INSTALLER_VERSION,
+    ) -> Dict[str, Optional[Path]]:
         """
         Detect Affinity installer files in a directory
         
@@ -56,19 +60,12 @@ class AffinityInstaller:
         if not search_path.exists() or not search_path.is_dir():
             return {}
         
-        installers = {}
-        
-        # Search for .exe files
-        for exe_file in search_path.glob("*.exe"):
-            filename = exe_file.name
-            
-            # Check against patterns
-            for product, pattern in self.PRODUCT_PATTERNS.items():
-                if re.match(pattern, filename):
-                    installers[product] = exe_file
-                    break
-        
-        return installers
+        scanner = InstallerScanner(search_path)
+        normalized_version = (
+            version if version in config.SUPPORTED_INSTALLER_VERSIONS else config.DEFAULT_INSTALLER_VERSION
+        )
+        selection = scanner.select(config.AFFINITY_PRODUCTS.keys(), normalized_version)
+        return {product: candidate.path for product, candidate in selection.items()}
     
     def install_affinity_product(self, 
                                 installer_path: Path, 

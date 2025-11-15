@@ -10,7 +10,7 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
 [![License: PPL](https://img.shields.io/badge/License-Personal%20Project-orange.svg?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/blob/master/LICENSE)
-[![Release](https://img.shields.io/badge/release-v1.0.0--beta-green?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/releases/tag/v1.0.0-beta)
+[![Release](https://img.shields.io/badge/release-v1.0.0-green?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/releases/tag/v1.0.0)
 [![Tests](https://img.shields.io/badge/tests-27%20passing-success?style=for-the-badge&logo=github-actions)](https://github.com/ind4skylivey/affinity-cli/actions)
 [![Code Style](https://img.shields.io/badge/code%20style-black-black?style=for-the-badge)](https://github.com/psf/black)
 
@@ -26,7 +26,7 @@
 
 ## 🌟 What is Affinity CLI?
 
-**Affinity CLI** is a powerful, open-source command-line tool that **automates the complete installation** of **Affinity Photo**, **Designer**, and **Publisher** on Linux distributions.
+**Affinity CLI** is a powerful, open-source command-line tool that **automates the complete installation** of **Affinity Photo**, **Designer**, and **Publisher** on Linux distributions. Version **v1.0.0** is the first polished milestone—distilled from months of late-night Wine experiments, community streams, and field engagements.
 
 ```bash
 # One command to rule them all
@@ -34,6 +34,12 @@ affinity-cli install
 ```
 
 > **No more manual Wine configuration. No more dependency hunting. Just professional creative tools on Linux.** 🚀
+
+### 🔥 Why creators are hyped about v1.0.0
+
+- **Battle-tested automation** – the same playbook we ran internally is now a single `affinity-cli install` command.
+- **Cross-distro parity** – Ubuntu, Fedora, Arch, SUSE, and more all follow the exact same installer story.
+- **Confidence-first UX** – installer discovery, verbose status, and `--dry-run` show every step before touching a Wine prefix.
 
 <div align="center">
 
@@ -146,6 +152,9 @@ affinity-publisher      # Launch Affinity Publisher
 
 # Or from your application menu! 🎨
 ```
+
+
+> In under five minutes you can go from a clean Linux install to launching Affinity as if it shipped with your distro. That same moment of disbelief people share on streams and meetups? This workflow makes it repeatable.
 
 ---
 

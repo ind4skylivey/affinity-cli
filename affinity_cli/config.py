@@ -1,26 +1,42 @@
-"""
-Global Configuration and Constants
-"""
+"""Global configuration and internal defaults for Affinity CLI."""
+
+from __future__ import annotations
 
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 
-# Version
-VERSION = "1.0.0-beta"
+# Project metadata ---------------------------------------------------------
 
-# Paths
+VERSION = "1.1.0"
+APP_NAME = "Affinity CLI"
+
+# Paths --------------------------------------------------------------------
+
 HOME_DIR = Path.home()
 CONFIG_DIR = HOME_DIR / ".config" / "affinity-cli"
 CACHE_DIR = HOME_DIR / ".cache" / "affinity-cli"
+DEFAULT_INSTALLERS_PATH = HOME_DIR / "Downloads" / "affinity-installers"
 DEFAULT_WINE_PREFIX = HOME_DIR / ".wine-affinity"
 DEFAULT_WINE_INSTALL = HOME_DIR / ".local" / "wine"
 
-# Wine
+# Versions -----------------------------------------------------------------
+
+DEFAULT_INSTALLER_VERSION = "v2"
+SUPPORTED_INSTALLER_VERSIONS = ("v1", "v2")
+
+# Wine ---------------------------------------------------------------------
+
 WINE_VERSION_DEFAULT = "latest"
 ELEMENTALWARRIOR_REPO = "https://gitlab.com/elementalwarrior/wine"
 
-# Affinity Products
-AFFINITY_PRODUCTS = {
+# Installer discovery -------------------------------------------------------
+
+INSTALLER_SUFFIXES = (".exe", ".msi")
+INSTALLER_NAME_PREFIX = "affinity"
+
+# Affinity Products --------------------------------------------------------
+
+AFFINITY_PRODUCTS: Dict[str, Dict[str, str]] = {
     "photo": {
         "name": "Affinity Photo",
         "exe_name": "Photo.exe",
@@ -38,7 +54,8 @@ AFFINITY_PRODUCTS = {
     },
 }
 
-# Dependencies by category
+# Dependencies by category -------------------------------------------------
+
 CORE_WINE_DEPS = [
     "wine",
     "wine64",
@@ -77,6 +94,7 @@ BUILD_DEPS = [
     "flex",
 ]
 
-# Ensure config directories exist
+# Ensure config directories exist -----------------------------------------
+
 CONFIG_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_DIR.mkdir(parents=True, exist_ok=True)

@@ -22,18 +22,18 @@ class WineManager:
     # ElementalWarrior Wine versions and download URLs
     WINE_VERSIONS = {
         "latest": {
-            "version": "9.20-staging",
+            "version": "10.18-staging",
             "urls": {
-                "ubuntu": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "debian": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "fedora": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "arch": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
-                "generic": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/wine-9.20-staging-amd64.tar.xz",
+                "ubuntu": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-staging-amd64-wow64.tar.xz",
+                "debian": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-staging-amd64-wow64.tar.xz",
+                "fedora": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-staging-amd64-wow64.tar.xz",
+                "arch": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-staging-amd64-wow64.tar.xz",
+                "generic": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/wine-10.18-staging-amd64-wow64.tar.xz",
             },
             "checksum": {
                 "type": "sha256",
-                "source": "https://github.com/Kron4ek/Wine-Builds/releases/download/9.20-staging/SHA256SUMS",
-                "filename": "wine-9.20-staging-amd64.tar.xz",
+                "source": "https://github.com/Kron4ek/Wine-Builds/releases/download/10.18/sha256sums.txt",
+                "filename": "wine-10.18-staging-amd64-wow64.tar.xz",
             },
         },
     }
@@ -53,8 +53,7 @@ class WineManager:
         self.version_info = self.WINE_VERSIONS.get(wine_version, self.WINE_VERSIONS["latest"])
         self.actual_version = self.version_info["version"]
         
-        self.wine_dir = self.install_dir / f"wine-{self.actual_version}"
-        self.wine_bin = self.wine_dir / "bin" / "wine64"
+        self._refresh_wine_paths()
     
     def check_wine_installed(self) -> bool:
         """
@@ -133,6 +132,9 @@ class WineManager:
             if not success:
                 return False, f"Extraction failed: {msg}"
             
+            # Refresh paths (archives may include architecture suffixes)
+            self._refresh_wine_paths()
+
             # Verify installation
             if not self.check_wine_installed():
                 return False, "Wine binary not found after extraction"
@@ -144,6 +146,25 @@ class WineManager:
         
         except Exception as e:
             return False, f"Unexpected error: {str(e)}"
+
+    def _refresh_wine_paths(self):
+        """Update wine_dir and wine_bin to point at the installed version"""
+        expected = self.install_dir / f"wine-{self.actual_version}"
+        if expected.exists():
+            self.wine_dir = expected
+        else:
+            candidates = sorted(self.install_dir.glob(f"wine-{self.actual_version}*"))
+            for candidate in candidates:
+                if candidate.is_dir():
+                    self.wine_dir = candidate
+                    break
+            else:
+                self.wine_dir = expected
+        wine64 = self.wine_dir / "bin" / "wine64"
+        if wine64.exists():
+            self.wine_bin = wine64
+        else:
+            self.wine_bin = self.wine_dir / "bin" / "wine"
     
     def verify_wine_integrity(self, file_path: Path) -> bool:
         """

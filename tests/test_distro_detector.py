@@ -70,7 +70,15 @@ class TestDistroDetector:
         """Test that is_root returns boolean"""
         result = DistroDetector.is_root()
         assert isinstance(result, bool)
-    
+
+    def test_command_exists_handles_missing_binary(self):
+        """_command_exists should return False for nonsense commands"""
+        assert not DistroDetector._command_exists("definitely-not-a-real-command-xyz")
+
+    def test_normalize_distro_id_handles_spaces(self):
+        """Normalization should reduce spaced IDs to canonical forms"""
+        assert DistroDetector._normalize_distro_id("Arch Linux") == "arch"
+
     def test_detect_distro_function(self):
         """Test standalone detect_distro function"""
         name, version, pm = detect_distro()

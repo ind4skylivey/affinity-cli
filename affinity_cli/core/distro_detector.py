@@ -5,9 +5,10 @@ Automatically identifies Linux distribution and package manager
 
 import os
 import re
+import shutil
 import subprocess
 from pathlib import Path
-from typing import Tuple, Optional, Dict
+from typing import Tuple, Optional, Dict, List
 from enum import Enum
 
 
@@ -95,7 +96,7 @@ class DistroDetector:
             return False
         
         try:
-            with open(os_release_path, 'r') as f:
+            with open(os_release_path, 'r', encoding="utf-8") as f:
                 content = f.read()
             
             # Extract ID, ID_LIKE, and VERSION
@@ -105,15 +106,18 @@ class DistroDetector:
             name_match = re.search(r'NAME=(["\']?)([^\'"]+)\1', content, re.MULTILINE)
             
             if id_match:
-                self.distro_id = id_match.group(2).lower()
+                raw_id = id_match.group(2)
+                self.distro_id = self._normalize_distro_id(raw_id)
                 self.distro_version = version_match.group(2) if version_match else "unknown"
                 self.distro_name = name_match.group(2) if name_match else self.distro_id
                 
                 # Check ID_LIKE for derivative distros (e.g., CachyOS = arch)
                 if id_like_match and self.distro_id not in self.DISTRO_MAPPING:
-                    id_like = id_like_match.group(2).lower().split()[0]  # Take first if multiple
-                    if id_like in self.DISTRO_MAPPING:
-                        self.distro_id = id_like
+                    for raw_like in id_like_match.group(2).split():
+                        normalized_like = self._normalize_distro_id(raw_like)
+                        if normalized_like in self.DISTRO_MAPPING:
+                            self.distro_id = normalized_like
+                            break
                 
                 # Map to family and package manager
                 self._map_distro()
@@ -165,14 +169,116 @@ class DistroDetector:
     
     def _map_distro(self):
         """Map distro ID to family and package manager"""
-        if self.distro_id in self.DISTRO_MAPPING:
-            family, pm = self.DISTRO_MAPPING[self.distro_id]
-            self.distro_family = family
-            self.package_manager = pm
-        else:
-            # Unknown distro, try to guess
+        if not self.distro_id:
             self.distro_family = DistroFamily.UNKNOWN
             self._guess_package_manager()
+            return
+        
+        candidates = self._candidate_ids(self.distro_id)
+        for candidate in candidates:
+            if candidate in self.DISTRO_MAPPING:
+                if candidate != self.distro_id:
+                    self.distro_id = candidate
+                family, pm = self.DISTRO_MAPPING[candidate]
+                self.distro_family = family
+                self.package_manager = pm
+                return
+        
+        # Unknown distro, try to guess based on heuristics
+        simplified = self.distro_id.replace('-', '').replace(' ', '')
+        heuristics = [
+            ("arch", DistroFamily.ARCH, PackageManager.PACMAN),
+            ("manjaro", DistroFamily.ARCH, PackageManager.PACMAN),
+            ("garuda", DistroFamily.ARCH, PackageManager.PACMAN),
+            ("debian", DistroFamily.DEBIAN, PackageManager.APT),
+            ("ubuntu", DistroFamily.DEBIAN, PackageManager.APT),
+            ("mint", DistroFamily.DEBIAN, PackageManager.APT),
+            ("pop", DistroFamily.DEBIAN, PackageManager.APT),
+            ("fedora", DistroFamily.FEDORA, PackageManager.DNF),
+            ("rhel", DistroFamily.FEDORA, PackageManager.DNF),
+            ("centos", DistroFamily.FEDORA, PackageManager.DNF),
+            ("rocky", DistroFamily.FEDORA, PackageManager.DNF),
+            ("alma", DistroFamily.FEDORA, PackageManager.DNF),
+            ("suse", DistroFamily.SUSE, PackageManager.ZYPPER),
+            ("opensuse", DistroFamily.SUSE, PackageManager.ZYPPER),
+        ]
+        for needle, family, pm in heuristics:
+            if needle in simplified:
+                self.distro_family = family
+                self.package_manager = pm
+                return
+        
+        self.distro_family = DistroFamily.UNKNOWN
+        self._guess_package_manager()
+
+    def _candidate_ids(self, distro_id: str) -> List[str]:
+        """Generate potential distro IDs that may map to known families"""
+        candidates: List[str] = []
+        if not distro_id:
+            return candidates
+        normalized = distro_id.strip()
+        if normalized:
+            candidates.append(normalized)
+        if '-' in normalized:
+            candidates.extend(part for part in normalized.split('-') if part)
+            candidates.append(normalized.replace('-', ''))
+        if ' ' in normalized:
+            candidates.extend(part for part in normalized.split() if part)
+            candidates.append(normalized.replace(' ', ''))
+        if normalized.endswith('linux') and len(normalized) > len('linux'):
+            candidates.append(normalized[:-5])
+        # Remove duplicates while preserving order
+        seen = set()
+        ordered_candidates: List[str] = []
+        for candidate in candidates:
+            lower_candidate = candidate.lower()
+            if lower_candidate not in seen:
+                ordered_candidates.append(lower_candidate)
+                seen.add(lower_candidate)
+        return ordered_candidates
+
+    @classmethod
+    def _normalize_distro_id(cls, raw_id: Optional[str]) -> Optional[str]:
+        """Normalize distro identifier strings"""
+        if not raw_id:
+            return None
+        normalized = raw_id.strip().strip('"\'').lower()
+        normalized = normalized.replace('_', '-')
+        normalized = re.sub(r'\s+', '-', normalized)
+        normalized = re.sub(r'-+', '-', normalized).strip('-')
+        if not normalized:
+            return None
+        candidates = [normalized, normalized.replace('-', ''), normalized.split('-')[0]]
+        if normalized.endswith('linux') and len(normalized) > len('linux'):
+            candidates.append(normalized[:-5])
+        for candidate in candidates:
+            if candidate in cls.DISTRO_MAPPING:
+                return candidate
+        simplified = normalized.replace('-', '')
+        heuristics = {
+            "arch": "arch",
+            "manjaro": "manjaro",
+            "garuda": "garuda",
+            "endeavouros": "endeavouros",
+            "cachyos": "cachyos",
+            "artix": "artix",
+            "ubuntu": "ubuntu",
+            "debian": "debian",
+            "mint": "linuxmint",
+            "elementary": "elementary",
+            "pop": "pop",
+            "fedora": "fedora",
+            "centos": "centos",
+            "rhel": "rhel",
+            "rocky": "rocky",
+            "alma": "almalinux",
+            "opensuse": "opensuse",
+            "suse": "suse",
+        }
+        for needle, canonical in heuristics.items():
+            if needle in simplified:
+                return canonical
+        return normalized
     
     def _guess_package_manager(self):
         """Try to guess package manager by checking available commands"""
@@ -195,12 +301,7 @@ class DistroDetector:
     def _command_exists(command: str) -> bool:
         """Check if a command is available in PATH"""
         try:
-            subprocess.run(
-                ["which", command],
-                capture_output=True,
-                timeout=2
-            )
-            return True
+            return shutil.which(command) is not None
         except Exception:
             return False
     
