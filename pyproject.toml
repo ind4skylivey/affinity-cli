@@ -49,7 +49,7 @@ Repository = "https://github.com/ind4skylivey/affinity-cli"
 affinity-cli = "affinity_cli.main:main"
 
 [tool.setuptools]
-packages = ["affinity_cli", "affinity_cli.core", "affinity_cli.utils", "affinity_cli.commands"]
+packages = ["affinity_cli"]
 
 [tool.black]
 line-length = 100
@@ -60,7 +60,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-v --cov=affinity_cli --cov-report=term-missing"
+addopts = "-v"
 
 [tool.mypy]
 python_version = "3.8"
