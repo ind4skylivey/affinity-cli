@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Literal, Optional
 
+from packaging.version import Version
+
 PRODUCT_NAMES = {
     "photo": "Affinity Photo",
     "designer": "Affinity Designer",
@@ -59,7 +61,9 @@ class InstallerDiscovery:
                     path=file,
                 )
             )
-        installers.sort(key=lambda item: (item.product, item.version, item.file_version))
+        installers.sort(
+            key=lambda item: (item.product, item.version, Version(item.file_version))
+        )
         return installers
 
     def select_installer(
