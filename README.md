@@ -1,6 +1,5 @@
 <div align="center">
-
-![Affinity CLI Hero](.github/assets/affinity-cli-hero.png)
+<img width="1536" height="1024" alt="affinity-cli-v1" src="https://github.com/user-attachments/assets/9af87b1c-1095-4fb3-8c36-8a25c25b7e2c" />
 
 # 🎨 Affinity CLI
 
