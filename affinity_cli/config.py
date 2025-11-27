@@ -7,7 +7,7 @@ from typing import Dict
 
 # Project metadata ---------------------------------------------------------
 
-VERSION = "1.1.0"
+VERSION = "1.1.1"
 APP_NAME = "Affinity CLI"
 
 # Paths --------------------------------------------------------------------
@@ -31,7 +31,7 @@ ELEMENTALWARRIOR_REPO = "https://gitlab.com/elementalwarrior/wine"
 
 # Installer discovery -------------------------------------------------------
 
-INSTALLER_SUFFIXES = (".exe", ".msi")
+INSTALLER_SUFFIXES = (".exe", ".msi", ".msix")
 INSTALLER_NAME_PREFIX = "affinity"
 
 # Affinity Products --------------------------------------------------------
@@ -94,7 +94,41 @@ BUILD_DEPS = [
     "flex",
 ]
 
-# Ensure config directories exist -----------------------------------------
+# Ensure config directories exist (best-effort; ignore permission errors) --
+for path in (CONFIG_DIR, CACHE_DIR):
+    try:
+        path.mkdir(parents=True, exist_ok=True)
+    except PermissionError:
+        # In restricted environments we still want imports to succeed.
+        pass
 
-CONFIG_DIR.mkdir(parents=True, exist_ok=True)
-CACHE_DIR.mkdir(parents=True, exist_ok=True)
+# Convenience re-exports ----------------------------------------------------
+# Imported lazily to avoid circular imports during module initialization.
+from affinity_cli.core.config_loader import ConfigLoader, ConfigError, ResolvedConfig, UserConfig  # noqa: E402,F401
+
+__all__ = [
+    "ConfigLoader",
+    "ConfigError",
+    "ResolvedConfig",
+    "UserConfig",
+    "VERSION",
+    "APP_NAME",
+    "HOME_DIR",
+    "CONFIG_DIR",
+    "CACHE_DIR",
+    "DEFAULT_INSTALLERS_PATH",
+    "DEFAULT_WINE_PREFIX",
+    "DEFAULT_WINE_INSTALL",
+    "DEFAULT_INSTALLER_VERSION",
+    "SUPPORTED_INSTALLER_VERSIONS",
+    "WINE_VERSION_DEFAULT",
+    "ELEMENTALWARRIOR_REPO",
+    "INSTALLER_SUFFIXES",
+    "INSTALLER_NAME_PREFIX",
+    "AFFINITY_PRODUCTS",
+    "CORE_WINE_DEPS",
+    "MULTIARCH_32BIT_DEPS",
+    "GRAPHICS_DEPS",
+    "FONT_DEPS",
+    "BUILD_DEPS",
+]

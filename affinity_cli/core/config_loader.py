@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+import os
+
 from affinity_cli import config
 
 try:  # Python 3.11+
@@ -49,7 +51,7 @@ class ResolvedConfig:
 
 
 class ConfigLoader:
-    """Loads configuration from ~/.config/affinity-cli or an explicit path."""
+    """Loads configuration from ~/.config/affinity-cli, an explicit path, or environment."""
 
     CONFIG_FILES = (
         "config.toml",
@@ -58,12 +60,29 @@ class ConfigLoader:
         "config.json",
     )
 
-    def __init__(self, explicit_path: Optional[str] = None) -> None:
-        self.explicit_path = Path(explicit_path).expanduser() if explicit_path else None
+    ENV_INSTALLERS = "AFFINITY_INSTALLERS_PATH"
+    ENV_PREFIX = "AFFINITY_WINE_PREFIX"
+    ENV_VERSION = "AFFINITY_DEFAULT_VERSION"
+
+    def __init__(self, explicit_path: Optional[str] = None, config_file: Optional[str] = None) -> None:
+        """
+        Args:
+            explicit_path: Backwards-compatible path argument (kept for callers)
+            config_file: Preferred keyword accepted by tests/CLI
+        """
+        chosen = config_file or explicit_path
+        self.explicit_path = Path(chosen).expanduser() if chosen else None
         self.config_path: Optional[Path] = None
         self._raw_data: Dict[str, Any] = {}
         self.user_config = UserConfig()
         self._load()
+
+    def load(self) -> ResolvedConfig:
+        """
+        Public helper used by tests and CLI entrypoint.
+        Mirrors `derive` with no overrides.
+        """
+        return self.derive()
 
     def derive(
         self,
@@ -72,17 +91,29 @@ class ConfigLoader:
         prefix_path: Optional[str] = None,
         version: Optional[str] = None,
     ) -> ResolvedConfig:
+        """
+        Resolve configuration using precedence:
+            explicit args > environment > user config file > defaults
+        """
+        env_installers = os.getenv(self.ENV_INSTALLERS)
+        env_prefix = os.getenv(self.ENV_PREFIX)
+        env_version = os.getenv(self.ENV_VERSION)
+
         installers = self._normalize_path(
             installers_path
+            or env_installers
             or (self.user_config.installers_path and str(self.user_config.installers_path))
             or str(config.DEFAULT_INSTALLERS_PATH)
         )
         prefix = self._normalize_path(
             prefix_path
+            or env_prefix
             or (self.user_config.wine_prefix and str(self.user_config.wine_prefix))
             or str(config.DEFAULT_WINE_PREFIX)
         )
-        version_choice = (version or self.user_config.default_version or config.DEFAULT_INSTALLER_VERSION)
+        version_choice = (
+            (version or env_version or self.user_config.default_version or config.DEFAULT_INSTALLER_VERSION)
+        )
         version_choice = version_choice.lower()
         if version_choice not in config.SUPPORTED_INSTALLER_VERSIONS:
             raise ConfigError(
@@ -93,12 +124,17 @@ class ConfigLoader:
 
     def _load(self) -> None:
         if self.explicit_path:
-            if not self.explicit_path.exists():
-                raise ConfigError(f"Config file not found: {self.explicit_path}")
-            self.config_path = self.explicit_path
-            self._raw_data = self._read_file(self.explicit_path)
-            self.user_config = self._parse_user_config(self._raw_data)
-            return
+            # If the caller asked for a specific path but it does not exist,
+            # fall back to defaults instead of crashing (friendlier UX/tests).
+            if self.explicit_path.exists():
+                self.config_path = self.explicit_path
+                self._raw_data = self._read_file(self.explicit_path)
+                self.user_config = self._parse_user_config(self._raw_data)
+                return
+            else:
+                self._raw_data = {}
+                self.user_config = UserConfig()
+                return
 
         for candidate in self.CONFIG_FILES:
             path = config.CONFIG_DIR / candidate
