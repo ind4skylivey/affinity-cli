@@ -16,7 +16,7 @@ PRODUCT_NAMES = {
 }
 
 INSTALLER_PATTERN = re.compile(
-    r"^affinity-(photo|designer|publisher)(-msi)?-([0-9]+\.[0-9]+\.[0-9]+)\.exe$",
+    r"^affinity-(photo|designer|publisher)(-msi|-msix)?-([0-9]+\.[0-9]+\.[0-9]+)\.(exe|msix)$",
     re.IGNORECASE,
 )
 
@@ -51,7 +51,7 @@ class InstallerDiscovery:
             match = INSTALLER_PATTERN.match(file.name)
             if not match:
                 continue
-            product, msi_marker, file_version = match.groups()
+            product, msi_marker, file_version, _ext = match.groups()
             version: VersionLiteral = "v2" if msi_marker else "v1"
             installers.append(
                 InstallerInfo(

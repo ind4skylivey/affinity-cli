@@ -41,6 +41,12 @@ def cli(ctx: click.Context, config_file: Optional[str], verbose: bool) -> None:
 @cli.command(name="list-installers")
 @click.option("--path", "installers_path", type=click.Path(file_okay=False), help="Directory to scan")
 @click.option(
+    "--installers",
+    "installers_path_alias",
+    type=click.Path(file_okay=False),
+    help="Alias for --path (matches other commands)",
+)
+@click.option(
     "--version",
     "version_filter",
     type=click.Choice(config.SUPPORTED_INSTALLER_VERSIONS),
@@ -50,12 +56,14 @@ def cli(ctx: click.Context, config_file: Optional[str], verbose: bool) -> None:
 def list_installers_cmd(
     ctx: click.Context,
     installers_path: Optional[str],
+    installers_path_alias: Optional[str],
     version_filter: Optional[str],
 ) -> None:
     """List every installer detected in the configured directory."""
 
     loader: ConfigLoader = ctx.obj["config_loader"]
-    settings = loader.derive(installers_path=installers_path)
+    path_choice = installers_path_alias or installers_path
+    settings = loader.derive(installers_path=path_choice)
 
     from affinity_cli.commands.list_installers import run_list_installers
 
