@@ -88,7 +88,46 @@ affinity-cli install --wine-profile minimal|standard|full
 ```
 
 ---
+## Wine runtime setup (required for Affinity installers)
 
+  We provide a portable Wine bootstrap in the companion repo [`affinity-wine-setup`](https://
+  github.com/ind4skylivey/affinity-wine-setup).
+
+  ### Quick start
+
+  curl -LO https://raw.githubusercontent.com/ind4skylivey/affinity-wine-setup/main/setup-wine-
+  ge.sh
+  chmod +x setup-wine-ge.sh
+  GE_TAG=GE-Proton10-25 ./setup-wine-ge.sh
+
+  This creates a clean prefix at ~/.wine-affinity, sets Windows 10, installs .NET 3.5 SP1 / .NET
+  4.8, DXVK, and VKD3D using Proton-GE.
+
+  ### Run Affinity CLI with the prepared runtime
+
+  WINEPREFIX=$HOME/.wine-affinity \
+  WINE=$HOME/.local/share/Proton-GE/GE-Proton10-25/files/bin/wine \
+  affinity-cli <command>
+
+  ### Custom options
+
+  - WINVER_TARGET: win10 (default) or win11
+  - WINEPREFIX: destination prefix (default ~/.wine-affinity)
+  - WINE_BIN / WINESERVER_BIN: use your own Wine build; set SKIP_DOWNLOAD=1 to skip Proton-
+    GE download
+  - GITHUB_TOKEN: optional, avoids GitHub API rate limits when using latest
+
+  ### Verify
+
+  WINEPREFIX=$HOME/.wine-affinity \
+  WINE=$HOME/.local/share/Proton-GE/GE-Proton10-25/files/bin/wine \
+  $WINE winecfg
+
+  If winecfg opens without WoW64 experimental warnings, the runtime is ready.
+
+
+  All in English and no extra summary files, per project rules. You can pin `GE_TAG` to newer
+  releases later—just update the example tag.
 ## Troubleshooting
 - Windows version warning: If the installer complains, rerun with a clean prefix or try the **full** profile.
 - Logs: set `AFFINITY_CLI_LOG=DEBUG` and re-run.
