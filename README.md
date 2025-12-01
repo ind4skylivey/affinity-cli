@@ -35,6 +35,9 @@ python -m pip install -e .
 # Install Affinity (default profile: standard)
 affinity-cli install
 ```
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/86b35ebb-5a4a-470e-a229-9d399819f9b5" width="600" />
+</p>
 
 ---
 
@@ -47,6 +50,10 @@ affinity-cli install
   - `Preparing: C:\...\netfx_....msi...`
 - Subsequent runs reuse the prepared prefix and are much faster.
 - Do **not** close the terminal during this step.
+
+
+
+<img width="1053" height="658" alt="32423451" src="https://github.com/user-attachments/assets/f8751529-ca6d-4d65-b060-0e19dae767c4" />
 
 ---
 
@@ -100,5 +107,6 @@ MIT License. See [LICENSE](LICENSE).
 ---
 
 ## Acknowledgments
-- AffinityOnLinux community for guidance on Wine/DXVK/WinRT setup.
-- Wine, DXVK, VKD3D projects and contributors.
+
+Wine, DXVK, VKD3D and all contributors keeping this stack alive on Linux.
+Everyone opening issues, testing early builds and sharing feedback – every report is a seed that helps Affinity-Cli grow.
