@@ -35,6 +35,7 @@ class UserConfig:
     wine_prefix: Optional[Path] = None
     default_version: Optional[str] = None
     download_url: Optional[str] = None
+    wine_profile: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -43,6 +44,7 @@ class ResolvedConfig:
     wine_prefix: Path
     default_version: str
     download_url: Optional[str]
+    wine_profile: str
 
     def to_display_dict(self) -> Dict[str, str]:
         return {
@@ -50,6 +52,7 @@ class ResolvedConfig:
             "Wine prefix": str(self.wine_prefix),
             "Default installer version": self.default_version,
             "Download URL": self.download_url or "default",
+            "Wine profile": self.wine_profile,
         }
 
 
@@ -67,6 +70,7 @@ class ConfigLoader:
     ENV_PREFIX = "AFFINITY_WINE_PREFIX"
     ENV_VERSION = "AFFINITY_DEFAULT_VERSION"
     ENV_DOWNLOAD_URL = "AFFINITY_DOWNLOAD_URL"
+    ENV_WINE_PROFILE = "AFFINITY_WINE_PROFILE"
 
     def __init__(self, explicit_path: Optional[str] = None, config_file: Optional[str] = None) -> None:
         """
@@ -103,6 +107,7 @@ class ConfigLoader:
         env_prefix = os.getenv(self.ENV_PREFIX)
         env_version = os.getenv(self.ENV_VERSION)
         env_download = os.getenv(self.ENV_DOWNLOAD_URL)
+        env_profile = os.getenv(self.ENV_WINE_PROFILE)
 
         installers = self._normalize_path(
             installers_path
@@ -126,11 +131,15 @@ class ConfigLoader:
                 f" {', '.join(config.SUPPORTED_INSTALLER_VERSIONS)}"
             )
         download_url = env_download or self.user_config.download_url
+        wine_profile = (env_profile or self.user_config.wine_profile or "standard").lower()
+        if wine_profile not in {"minimal", "standard", "full"}:
+            raise ConfigError("Invalid wine profile. Choose minimal, standard, or full.")
         return ResolvedConfig(
             installers_path=installers,
             wine_prefix=prefix,
             default_version=version_choice,
             download_url=download_url,
+            wine_profile=wine_profile,
         )
 
     def _load(self) -> None:
@@ -161,7 +170,7 @@ class ConfigLoader:
     def _parse_user_config(self, payload: Dict[str, Any]) -> UserConfig:
         if not payload:
             return UserConfig()
-        allowed = {"installers_path", "wine_prefix", "default_version", "download_url"}
+        allowed = {"installers_path", "wine_prefix", "default_version", "download_url", "wine_profile"}
         unexpected = set(payload.keys()) - allowed
         if unexpected:
             raise ConfigError(f"Unknown configuration field(s): {', '.join(sorted(unexpected))}")
@@ -179,11 +188,19 @@ class ConfigLoader:
         download_url = payload.get("download_url")
         if download_url is not None and not isinstance(download_url, str):
             raise ConfigError("download_url must be a string URL")
+        wine_profile = payload.get("wine_profile")
+        if wine_profile is not None:
+            if not isinstance(wine_profile, str):
+                raise ConfigError("wine_profile must be a string")
+            wine_profile = wine_profile.lower().strip()
+            if wine_profile not in {"minimal", "standard", "full"}:
+                raise ConfigError("wine_profile must be one of minimal, standard, full")
         return UserConfig(
             installers_path=installers,
             wine_prefix=prefix,
             default_version=default_version,
             download_url=download_url,
+            wine_profile=wine_profile,
         )
 
     def _read_file(self, path: Path) -> Dict[str, Any]:
