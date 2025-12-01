@@ -4,10 +4,10 @@
 **One Command. Zero Friction.**
 Install the Affinity Universal app on Linux with a prepared Wine environment.
 
-[![GitHub stars](https://img.shields.io/github/stars/ind4skylivey/affinity-cli?style=flat&color=blue)](https://github.com/ind4skylivey/affinity-cli)
-[![CI](https://img.shields.io/github/actions/workflow/status/ind4skylivey/affinity-cli/tests.yml?label=CI)](https://github.com/ind4skylivey/affinity-cli/actions)
-[![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/ind4skylivey/affinity-cli?label=release&color=blueviolet)](https://github.com/ind4skylivey/affinity-cli/releases/tag/v2.0.0)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![License](https://img.shields.io/github/license/ind4skylivey/affinity-cli?color=blue)](LICENSE)
+[![Wine](https://img.shields.io/badge/Wine-10.x-red?logo=wine&logoColor=white)](https://www.winehq.org/)
 
 ---
 
