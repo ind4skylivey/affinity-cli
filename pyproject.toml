@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "affinity-cli"
-version = "1.1.0"
+version = "1.1.1"
 description = "Universal CLI installer for Affinity products on Linux"
 readme = "README.md"
 requires-python = ">=3.8"
@@ -26,7 +26,9 @@ classifiers = [
 ]
 dependencies = [
     "click>=8.1.0",
+    "requests>=2.31.0",
     "rich>=13.0.0",
+    "tqdm>=4.66.0",
     "tomli; python_version < '3.11'",
 ]
 
@@ -49,7 +51,7 @@ Repository = "https://github.com/ind4skylivey/affinity-cli"
 affinity-cli = "affinity_cli.main:main"
 
 [tool.setuptools]
-packages = ["affinity_cli"]
+packages = {find = {include = ["affinity_cli*"]}}
 
 [tool.black]
 line-length = 100

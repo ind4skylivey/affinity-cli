@@ -1,9 +1,8 @@
-"""
-Setup script for Affinity CLI
-"""
+"""Setup script for Affinity CLI."""
 
-from setuptools import setup, find_packages
 from pathlib import Path
+
+from setuptools import find_packages, setup
 
 # Read long description from README
 readme_file = Path(__file__).parent / "README.md"
@@ -11,18 +10,20 @@ long_description = readme_file.read_text() if readme_file.exists() else ""
 
 setup(
     name="affinity-cli",
-    version="1.1.0",
+    version="1.1.1",
     author="ind4skylivey",
     description="Universal CLI installer for Affinity products on Linux",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/ind4skylivey/affinity-cli",
-    packages=find_packages(),
+    packages=find_packages(include=["affinity_cli*"]),
     include_package_data=True,
     python_requires=">=3.8",
     install_requires=[
         "click>=8.1.0",
+        "requests>=2.31.0",
         "rich>=13.0.0",
+        "tqdm>=4.66.0",
         "tomli; python_version < '3.11'",
     ],
     entry_points={

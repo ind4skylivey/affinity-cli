@@ -59,14 +59,15 @@ class WineExecutor:
         if not installer_path.exists():
             raise WineExecutorError(f"Installer not found: {installer_path}")
         env = self._build_env()
-        arguments = [str(installer_path)] + self._installer_arguments(version_type)
+        arguments = self._installer_arguments(installer_path, version_type)
         command = [str(self.wine_binary)] + arguments
         return self._run_command(command, env=env, capture=True)
 
-    def _installer_arguments(self, version_type: str) -> List[str]:
+    def _installer_arguments(self, installer_path: Path, version_type: str) -> List[str]:
+        # Default: launch the EXE directly (GUI). Keep optional quiet flags for legacy v1/v2.
         if version_type == "v2":
-            return ["/quiet", "/norestart"]
-        return ["/S", "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"]
+            return [str(installer_path), "/quiet", "/norestart"]
+        return [str(installer_path)]
 
     def _run_command(
         self,
@@ -103,7 +104,7 @@ class WineExecutor:
             raise WineExecutorError(f"Command timed out: {' '.join(command)}") from exc
 
     def _resolve_wine_binary(self) -> Path:
-        preferred = os.environ.get("AFFINITY_CLI_WINE")
+        preferred = os.environ.get("AFFINITY_WINE_BIN") or os.environ.get("AFFINITY_CLI_WINE")
         candidates: List[Optional[str]] = [preferred, "wine64", "wine"]
         for candidate in candidates:
             if not candidate:
@@ -129,7 +130,30 @@ class WineExecutor:
         env["WINEPREFIX"] = str(self.prefix_path)
         env.setdefault("WINEDEBUG", "-all")
         env.setdefault("WINEARCH", "win64")
+        env.setdefault("WINE_RENDERER", "vulkan")  # match AffinityOnLinux guidance (renderer=vulkan)
         return env
+
+    def check_windows_version(self) -> None:
+        """Ensure Wine reports a supported Windows version (10/11) before install."""
+        env = self._build_env()
+        try:
+            res = subprocess.run(
+                [str(self.wine_binary), "cmd", "/c", "ver"],
+                env=env,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+        except Exception as exc:
+            raise WineExecutorError(f"Failed to query Windows version: {exc}") from exc
+
+        output = (res.stdout or "") + (res.stderr or "")
+        if "Version 10." in output or "Version 11." in output:
+            return
+        raise WineExecutorError(
+            f"Wine reports unsupported Windows version. Output:\n{output.strip()}\n"
+            "Set the prefix to Windows 10/11 and retry."
+        )
 
 
 __all__ = ["WineExecutor", "WineExecutorError", "CommandResult"]

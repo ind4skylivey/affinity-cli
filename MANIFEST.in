@@ -1,0 +1,2 @@
+recursive-include affinity_cli/installers *
+recursive-include affinity_cli/data *

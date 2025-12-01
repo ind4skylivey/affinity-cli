@@ -2,23 +2,18 @@
 
 ![Affinity CLI Hero](.github/assets/affinity-cli-hero.png)
 
-# 🎨 Affinity CLI
+# 🎨 Affinity CLI · v2.0.0
 
-### **Universal Linux Installer for Affinity Products**
+### One Command. Zero Friction.
 
-*Professional, One-Command Installation for Creative Professionals*
+[![GitHub stars](https://img.shields.io/github/stars/ind4skylivey/affinity-cli?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli)
+[![CI](https://img.shields.io/github/actions/workflow/status/ind4skylivey/affinity-cli/tests.yml?style=for-the-badge&label=CI)](https://github.com/ind4skylivey/affinity-cli/actions)
+[![Python](https://img.shields.io/badge/python-3.8%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/downloads/)
-[![License: PPL](https://img.shields.io/badge/License-Personal%20Project-orange.svg?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/blob/master/LICENSE)
-[![Release](https://img.shields.io/badge/release-v1.0.0-green?style=for-the-badge)](https://github.com/ind4skylivey/affinity-cli/releases/tag/v1.0.0)
-[![Tests](https://img.shields.io/badge/tests-27%20passing-success?style=for-the-badge&logo=github-actions)](https://github.com/ind4skylivey/affinity-cli/actions)
-[![Code Style](https://img.shields.io/badge/code%20style-black-black?style=for-the-badge)](https://github.com/psf/black)
+**Affinity CLI** is the universal Linux installer for the new Affinity Universal app bundle. It automates preflight checks, downloads the official universal installer with smart resume/proxy support, and sets up Wine so all Affinity apps land in one smooth run.
 
-**[Features](#-features) • [Quick Start](#-quick-start) • [Installation](#-installation) • [Documentation](#-documentation) • [Contributing](#-contributing)**
-
----
-
-### 🐧 **Linux users deserve professional creative tools.**
+**[Quick Start](#-quick-start) • [Features](#-features) • [Commands](#-commands) • [Troubleshooting](#-troubleshooting)**
 
 </div>
 
@@ -26,97 +21,45 @@
 
 ## 🌟 What is Affinity CLI?
 
-**Affinity CLI** is a powerful, open-source command-line tool that **automates the complete installation** of **Affinity Photo**, **Designer**, and **Publisher** on Linux distributions. Version **v1.0.0** is the first polished milestone—distilled from months of late-night Wine experiments, community streams, and field engagements.
+The fastest way to install the Affinity Universal bundle on Linux. One command handles:
 
-> 📌 Everything visible here is served straight from `release/v1.0.0-clean`. To keep the release snapshot pristine, add future commits to that branch instead of `master` so the landing view stays tidy for everyone.
+- **Preflight**: disk space, cache perms, Wine/Proton presence, Vulkan/GPU hints, distro detection.
+- **Smart download**: proxy-aware, resumable, retrying downloader that fetches the official universal installer.
+- **Install & verify**: runs the installer once under Wine and confirms app binaries landed.
+
+> **No more manual Wine tuning. No more hunting three separate installers. One Command. Zero Friction.** 🚀
+
+---
+
+## ⚡ Quick Start
 
 ```bash
-# One command to rule them all
+# From source
+git clone https://github.com/ind4skylivey/affinity-cli.git
+cd affinity-cli
+python3 -m venv .venv
+source .venv/bin/activate  # or .venv/bin/activate.fish
+python -m pip install --upgrade pip
+python -m pip install -e .
+
+# Pre-flight only (safe, no changes)
+affinity-cli install --preflight-only
+
+# Install (downloads if needed, then installs)
 affinity-cli install
 ```
-
-> **No more manual Wine configuration. No more dependency hunting. Just professional creative tools on Linux.** 🚀
-
-### 🔥 Why creators are hyped about v1.0.0
-
-- **Battle-tested automation** – the same playbook we ran internally is now a single `affinity-cli install` command.
-- **Cross-distro parity** – Ubuntu, Fedora, Arch, SUSE, and more all follow the exact same installer story.
-- **Confidence-first UX** – installer discovery, verbose status, and `--dry-run` show every step before touching a Wine prefix.
-
-<div align="center">
-
-### ✨ **Transform your Linux system into a creative powerhouse**
-
-_New hero artwork highlights the v1.0.0 release energy—swap the file at `.github/assets/affinity-cli-hero.png` whenever you refresh the brand._
-
-</div>
 
 ---
 
 ## 🎯 Features
 
-<table>
-<tr>
-<td width="33%" align="center">
-
-### 🐧 Universal Support
-Auto-detects **15+ distros**  
-Debian • Fedora • Arch • SUSE
-
-</td>
-<td width="33%" align="center">
-
-### ⚡ Full Automation
-One command installs  
-**everything** you need
-
-</td>
-<td width="33%" align="center">
-
-### 🍷 Smart Wine Setup
-Optimized configuration  
-with **.NET Framework**
-
-</td>
-</tr>
-<tr>
-<td width="33%" align="center">
-
-### 🎨 Desktop Integration
-Menu entries, aliases,  
-**native experience**
-
-</td>
-<td width="33%" align="center">
-
-### 💻 Beautiful CLI
-Rich progress bars  
-and **clear messages**
-
-</td>
-<td width="33%" align="center">
-
-### ✅ Well-Tested
-27 unit tests  
-**100% passing**
-
-</td>
-</tr>
-</table>
+- **Universal-first**: single Affinity Universal EXE installs Photo, Designer, and Publisher in one pass.
+- **Smart Downloader**: retries, resume, proxy awareness, SHA256 verification, non-interactive env vars.
+- **Preflight Guardrails**: disk, cache perms (700), Wine/Proton detection, Vulkan hinting, distro/package-manager awareness.
+- **Automation Friendly**: `--preflight-only`, `--dry-run`, `--silent`, `--prefix` overrides.
+- **Minimal Cognitive Load**: defaults that “just work”; prompts only when absolutely necessary.
 
 ---
-
-## 🖼️ Supported Products
-
-<div align="center">
-
-| Product | Versions | Status |
-|:-------:|:--------:|:------:|
-| 📸 **Affinity Photo** | v1 • v2 • v3 | ✅ Supported |
-| 🎨 **Affinity Designer** | v1 • v2 • v3 | ✅ Supported |
-| 📄 **Affinity Publisher** | v1 • v2 • v3 | ✅ Supported |
-
-</div>
 
 ---
 
@@ -124,45 +67,80 @@ and **clear messages**
 
 ### ⚡ Installation (3 simple steps)
 
-```bash
-# 1️⃣ Clone the repository
-git clone https://github.com/ind4skylivey/affinity-cli.git
-cd affinity-cli
-
-# 2️⃣ Install the CLI tool
-pip install -e .
-
-# 3️⃣ Check your system status
-affinity-cli status
-```
-
-### 🎬 Launch Affinity Products
+## 🛠 Commands
 
 ```bash
-# Install Affinity products (interactive mode)
-affinity-cli install
-
-# Or specify installer location
-affinity-cli install --installer-path ~/Downloads
+affinity-cli install             # Full flow: preflight -> download -> install -> verify
+affinity-cli install --preflight-only
+affinity-cli install --dry-run
+affinity-cli install --silent
+affinity-cli install --prefix ~/.wine-affinity-pro
+affinity-cli install --download-url https://downloads.affinity.studio/Affinity%20x64.exe
+affinity-cli install --wine-profile minimal|standard|full
 ```
 
-### 🎉 That's it! Launch from:
+> Positional product targets (photo/designer/publisher) are no longer supported. Use the universal install flow above.
 
+### First run: Wine prefix preparation
+
+- On the first `affinity-cli install`, a dedicated 64-bit Wine prefix is prepared.
+- The prefix is set to Windows 11 and installs Windows components via winetricks (corefonts, runtimes, DXVK/VKD3D, etc. depending on profile).
+- The initial setup can take several minutes—especially with the **full** profile.
+- During this time you may see logs like:
+  - `winetricks is still running... please wait`
+  - `Preparing: C:\...\netfx_....msi...`
+- Subsequent runs reuse the prepared prefix and are much faster.
+
+**Do not panic:**
+- It is normal for the first install to take several minutes.
+- Do not close the terminal while winetricks is running.
+- If something fails, run `affinity-cli install --preflight-only` and then `affinity-cli install` again.
+
+> During prefix preparation you will see winetricks output and messages like “winetricks is still running… please wait.” This is expected on first run—do not close the terminal. Depending on hardware and profile (especially “full”), this can take 10–20 minutes.
+
+### Wine profiles
+
+- **minimal** – fastest, smallest set (for advanced users): win11, corefonts, tahoma, crypt32, d3dcompiler_47
+- **standard** (default) – recommended balance: minimal + vcrun2022
+- **full** – maximum compatibility; first run can take 10–20 minutes: standard + dotnet48, dxvk, vkd3d, remove_mono
+
+Examples:
 ```bash
-# Terminal
-affinity-photo          # Launch Affinity Photo
-affinity-designer       # Launch Affinity Designer
-affinity-publisher      # Launch Affinity Publisher
+affinity-cli install --wine-profile minimal
+affinity-cli install --wine-profile standard   # default
+affinity-cli install --wine-profile full
 
-# Or from your application menu! 🎨
+# via environment variable
+AFFINITY_WINE_PROFILE=full affinity-cli install
 ```
 
+## ✅ Verification & Launch
 
-> In under five minutes you can go from a clean Linux install to launching Affinity as if it shipped with your distro. That same moment of disbelief people share on streams and meetups? This workflow makes it repeatable.
+- Check binaries: `find ~/.wine-affinity -name "Photo.exe" -o -name "Designer.exe" -o -name "Publisher.exe"`
+- Launch (example): `wine64 ~/.wine-affinity/drive_c/Program\ Files/Affinity/Photo\ 2/Photo.exe &`
+- Status: `affinity-cli status` (shows distro, installers, Wine prefix, installed apps)
 
 ---
 
-## 🐧 Supported Distributions
+## 🤝 Contributing & Support
+
+- Issues and PRs welcome at GitHub.
+- Keep changes focused on the universal installer flow.
+- For logs, include `AFFINITY_CLI_LOG=DEBUG` and the output of `affinity-cli status`.
+
+## 🧭 Roadmap
+
+- Pre-built Wine runtime & prefix: optional downloadable, pre-configured runtime/prefix to make the first install even faster and more consistent.
+
+---
+
+## 🙏 Thank You
+
+Thanks to the Linux and Affinity community for testing, filing bugs, and sharing configs. Your feedback made the v2.0.0 release possible. Onward!
+
+---
+
+## 🐧 Supported Distributions (tested)
 
 <div align="center">
 
@@ -182,92 +160,9 @@ affinity-publisher      # Launch Affinity Publisher
 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/fedora/fedora-original.svg" width="64" height="64" alt="Fedora"/>
 <br><b>Fedora</b>
 <br>38 • 39 • 40+
-</td>
-<td align="center" width="25%">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/archlinux/archlinux-original.svg" width="64" height="64" alt="Arch Linux"/>
-<br><b>Arch Linux</b>
-<br>Rolling Release
-</td>
-</tr>
-<tr>
-<td align="center" width="25%">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="64" height="64" alt="Linux Mint"/>
-<br><b>Linux Mint</b>
-<br>20.x • 21.x
-</td>
-<td align="center" width="25%">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="64" height="64" alt="Manjaro"/>
-<br><b>Manjaro</b>
-<br>All versions
-</td>
-<td align="center" width="25%">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/opensuse/opensuse-original.svg" width="64" height="64" alt="openSUSE"/>
-<br><b>openSUSE</b>
-<br>Leap • Tumbleweed
-</td>
-<td align="center" width="25%">
-<img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linux/linux-original.svg" width="64" height="64" alt="More Distros"/>
-<br><b>More!</b>
-<br>Pop!_OS • Elementary
-</td>
-</tr>
-</table>
-
-</div>
+Tested on recent Ubuntu, Debian, Fedora, Arch/Manjaro, and openSUSE releases. Other systemd-based distros typically work—open an issue with logs if something breaks.
 
 ---
-
-## 💎 Why Choose Affinity CLI?
-
-<div align="center">
-
-### 🆚 **Comparison with Alternatives**
-
-</div>
-
-| Feature | 🎨 Affinity CLI | Lutris | Bottles | Manual Wine |
-|---------|:--------------:|:------:|:-------:|:-----------:|
-| **One-command install** | ✅ | ❌ | ❌ | ❌ |
-| **Auto distro detection** | ✅ | ❌ | ❌ | ❌ |
-| **Auto dependency install** | ✅ | ❌ | ❌ | ❌ |
-| **Desktop integration** | ✅ | ✅ | ✅ | ❌ |
-| **No external managers** | ✅ | ❌ | ❌ | ✅ |
-| **Lightweight** | ✅ | ❌ | ❌ | ✅ |
-| **Built for Affinity** | ✅ | ❌ | ❌ | ❌ |
-| **CLI + GUI launcher** | ✅ | ✅ | ✅ | ❌ |
-| **Open source** | ✅ | ✅ | ✅ | ✅ |
-
-<div align="center">
-
-### 🏆 **Affinity CLI = Best of all worlds**
-
-</div>
-
----
-
-## 📚 Documentation
-
-<details>
-<summary>📖 <b>Installation Methods</b></summary>
-
-### From Source (Development)
-```bash
-git clone https://github.com/ind4skylivey/affinity-cli.git
-cd affinity-cli
-pip install -e .
-```
-
-### From PyPI (Coming Soon)
-```bash
-pip install affinity-cli
-```
-
-### From AUR (Arch Users - Coming Soon)
-```bash
-yay -S affinity-cli
-```
-
-</details>
 
 <details>
 <summary>⚙️ <b>Command Reference</b></summary>
@@ -278,17 +173,14 @@ yay -S affinity-cli
 # Interactive installation
 affinity-cli install
 
-# Specify installer path
-affinity-cli install --installer-path ~/Downloads
-
-# Install specific products
-affinity-cli install --products photo,designer
+# Pre-flight only (no changes)
+affinity-cli install --preflight-only
 
 # Custom Wine prefix
 affinity-cli install --prefix ~/.my-affinity
 
-# Skip dependency check (advanced)
-affinity-cli install --skip-dependencies
+# Dry-run (log commands without executing)
+affinity-cli install --dry-run
 ```
 
 ### Management Commands
@@ -401,17 +293,7 @@ graph LR
     E --> F[🎨 Install Affinity]
     F --> G[🖥️ Desktop Integration]
     G --> H[✅ Done!]
-    
-    style A fill:#4CAF50,stroke:#2E7D32,color:#fff
-    style H fill:#4CAF50,stroke:#2E7D32,color:#fff
-    style B fill:#2196F3,stroke:#1565C0,color:#fff
-    style C fill:#FF9800,stroke:#E65100,color:#fff
-    style D fill:#9C27B0,stroke:#6A1B9A,color:#fff
-    style E fill:#F44336,stroke:#C62828,color:#fff
-    style F fill:#E91E63,stroke:#AD1457,color:#fff
-    style G fill:#00BCD4,stroke:#00838F,color:#fff
 ```
-
 </div>
 
 ### 🔄 Installation Pipeline

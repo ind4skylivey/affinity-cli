@@ -3,8 +3,8 @@ Affinity Installer Module
 Install Affinity products into Wine prefix
 """
 
-import subprocess
 import os
+import subprocess
 from pathlib import Path
 from typing import Optional, Tuple, List, Dict
 
@@ -12,17 +12,11 @@ from affinity_cli import config
 from affinity_cli.core.installer_scanner import InstallerScanner
 from affinity_cli.core.prefix_manager import PrefixManager
 from affinity_cli.core.wine_manager import WineManager
+from affinity_cli.utils.logger import logger
 
 
 class AffinityInstaller:
-    """Install and manage Affinity products"""
-    
-    # Product detection patterns
-    PRODUCT_PATTERNS = {
-        "photo": r"(?i)photo.*\.exe",
-        "designer": r"(?i)designer.*\.exe",
-        "publisher": r"(?i)publisher.*\.exe",
-    }
+    """Install and manage Affinity products via the universal installer."""
     
     def __init__(self,
                  prefix_path: Optional[Path] = None,
@@ -49,29 +43,28 @@ class AffinityInstaller:
         version: str = config.DEFAULT_INSTALLER_VERSION,
     ) -> Dict[str, Optional[Path]]:
         """
-        Detect Affinity installer files in a directory
+        Detect the Affinity universal installer in a directory.
         
         Args:
             search_path: Directory to search for installers
         
         Returns:
-            Dictionary mapping product names to installer paths
+            Dictionary with a single key 'universal' pointing to the installer path.
         """
         if not search_path.exists() or not search_path.is_dir():
             return {}
         
         scanner = InstallerScanner(search_path)
-        normalized_version = (
-            version if version in config.SUPPORTED_INSTALLER_VERSIONS else config.DEFAULT_INSTALLER_VERSION
-        )
-        selection = scanner.select(config.AFFINITY_PRODUCTS.keys(), normalized_version)
-        return {product: candidate.path for product, candidate in selection.items()}
+        candidate = scanner.first()
+        if candidate:
+            return {"universal": candidate.path}
+        return {}
     
     def install_affinity_product(self, 
                                 installer_path: Path, 
                                 product: str) -> Tuple[bool, str]:
         """
-        Install an Affinity product
+        Deprecated: retained for backward compatibility with legacy product-specific calls.
         
         Args:
             installer_path: Path to installer .exe
@@ -80,6 +73,10 @@ class AffinityInstaller:
         Returns:
             Tuple of (success, message)
         """
+        logger.warning(
+            "install_affinity_product is deprecated; the universal installer now handles all products. "
+            "Use WineExecutor.run_installer on the universal EXE instead."
+        )
         if not installer_path.exists():
             return False, f"Installer not found: {installer_path}"
         

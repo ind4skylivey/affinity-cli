@@ -9,7 +9,7 @@ def test_config_defaults(tmp_path, monkeypatch):
     cfg = loader.load()
     assert cfg.installers_path.name == "affinity-installers"
     assert cfg.wine_prefix.name == ".wine-affinity"
-    assert cfg.default_version == "v2"
+    assert cfg.default_version == "universal"
 
 
 def test_config_env_override(tmp_path, monkeypatch):
@@ -17,8 +17,8 @@ def test_config_env_override(tmp_path, monkeypatch):
     loader = ConfigLoader(config_file=config_file)
     monkeypatch.setenv("AFFINITY_INSTALLERS_PATH", str(tmp_path / "custom"))
     monkeypatch.setenv("AFFINITY_WINE_PREFIX", str(tmp_path / "prefix"))
-    monkeypatch.setenv("AFFINITY_DEFAULT_VERSION", "v1")
+    monkeypatch.setenv("AFFINITY_DEFAULT_VERSION", "universal")
     cfg = loader.load()
     assert cfg.installers_path == tmp_path / "custom"
     assert cfg.wine_prefix == tmp_path / "prefix"
-    assert cfg.default_version == "v1"
+    assert cfg.default_version == "universal"

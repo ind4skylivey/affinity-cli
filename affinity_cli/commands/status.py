@@ -53,21 +53,29 @@ def _render_distro(console: Console) -> None:
 
 
 def _render_installers(settings: ResolvedConfig, console: Console) -> None:
-    scanner = InstallerScanner(settings.installers_path)
+    scanner = InstallerScanner(settings.installers_path, config.CACHE_DIR)
     candidates = scanner.scan()
 
-    counts = {"v1": 0, "v2": 0}
-    for candidate in candidates:
-        counts[candidate.version_type] = counts.get(candidate.version_type, 0) + 1
-
-    panel_lines = [f"{version}: {count}" for version, count in counts.items()]
     if not candidates:
-        panel_lines.append("No installers detected. Use `affinity-cli list-installers`.")
+        console.print(
+            Panel.fit(
+                "Universal installer not found locally. It will be downloaded automatically when needed.",
+                border_style="yellow",
+            )
+        )
+        return
 
+    latest = candidates[0]
     console.print(
         Panel.fit(
-            f"Installers in {settings.installers_path}:\n" + "\n".join(panel_lines),
-            border_style="green" if candidates else "yellow",
+            "\n".join(
+                [
+                    "Affinity Universal installer is available.",
+                    f"Path: {latest.path}",
+                    f"Size: {latest.human_size}",
+                ]
+            ),
+            border_style="green",
         )
     )
 

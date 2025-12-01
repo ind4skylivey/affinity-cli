@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import sys
-from typing import List, Optional
+from typing import Optional
 
 import click
 from rich.console import Console
@@ -41,6 +41,12 @@ def cli(ctx: click.Context, config_file: Optional[str], verbose: bool) -> None:
 @cli.command(name="list-installers")
 @click.option("--path", "installers_path", type=click.Path(file_okay=False), help="Directory to scan")
 @click.option(
+    "--installers",
+    "installers_path_alias",
+    type=click.Path(file_okay=False),
+    help="Alias for --path (matches other commands)",
+)
+@click.option(
     "--version",
     "version_filter",
     type=click.Choice(config.SUPPORTED_INSTALLER_VERSIONS),
@@ -50,12 +56,14 @@ def cli(ctx: click.Context, config_file: Optional[str], verbose: bool) -> None:
 def list_installers_cmd(
     ctx: click.Context,
     installers_path: Optional[str],
+    installers_path_alias: Optional[str],
     version_filter: Optional[str],
 ) -> None:
     """List every installer detected in the configured directory."""
 
     loader: ConfigLoader = ctx.obj["config_loader"]
-    settings = loader.derive(installers_path=installers_path)
+    path_choice = installers_path_alias or installers_path
+    settings = loader.derive(installers_path=path_choice)
 
     from affinity_cli.commands.list_installers import run_list_installers
 
@@ -63,7 +71,6 @@ def list_installers_cmd(
 
 
 @cli.command(name="install")
-@click.argument("target", type=click.Choice(["photo", "designer", "publisher", "all"], case_sensitive=False))
 @click.option(
     "--version",
     "version_choice",
@@ -72,19 +79,37 @@ def list_installers_cmd(
 )
 @click.option("--prefix", "prefix_path", type=click.Path(file_okay=False), help="Wine prefix override")
 @click.option("--installers", "installers_path", type=click.Path(file_okay=False), help="Installer directory override")
+@click.option("--download-url", "download_url_override", help="Override the universal installer URL")
 @click.option("--silent", is_flag=True, help="Skip confirmation prompts")
 @click.option("--dry-run", is_flag=True, help="Log actions without executing installers")
+@click.option("--preflight-only", is_flag=True, help="Run environment checks and exit")
+@click.option(
+    "--wine-profile",
+    type=click.Choice(["minimal", "standard", "full"]),
+    default=None,
+    help="Wine component profile (minimal, standard, full). Default: standard.",
+)
+@click.argument("extra", nargs=-1)
 @click.pass_context
 def install_cmd(
     ctx: click.Context,
-    target: str,
     version_choice: Optional[str],
     prefix_path: Optional[str],
     installers_path: Optional[str],
+    download_url_override: Optional[str],
     silent: bool,
     dry_run: bool,
+    preflight_only: bool,
+    wine_profile: Optional[str],
+    extra: tuple,
 ) -> None:
-    """Install Affinity Photo, Designer, Publisher, or all of them."""
+    """Install Affinity using the universal installer."""
+
+    if extra:
+        raise click.ClickException(
+            "Per-product install syntax is no longer supported. "
+            "Use the universal installer:\n  affinity-cli install"
+        )
 
     loader: ConfigLoader = ctx.obj["config_loader"]
     settings = loader.derive(
@@ -93,19 +118,16 @@ def install_cmd(
         version=version_choice,
     )
 
-    if target.lower() == "all":
-        product_targets: List[str] = list(config.AFFINITY_PRODUCTS.keys())
-    else:
-        product_targets = [target.lower()]
-
     from affinity_cli.commands.install import run_install
 
     run_install(
-        product_targets=product_targets,
         settings=settings,
         console=ctx.obj["console"],
         silent=silent,
         dry_run=dry_run,
+        preflight_only=preflight_only,
+        wine_profile=wine_profile,
+        download_url_override=download_url_override,
     )
 
 

@@ -7,6 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
+import os
+
 from affinity_cli import config
 
 try:  # Python 3.11+
@@ -32,6 +34,7 @@ class UserConfig:
     installers_path: Optional[Path] = None
     wine_prefix: Optional[Path] = None
     default_version: Optional[str] = None
+    download_url: Optional[str] = None
 
 
 @dataclass(frozen=True)
@@ -39,17 +42,19 @@ class ResolvedConfig:
     installers_path: Path
     wine_prefix: Path
     default_version: str
+    download_url: Optional[str]
 
     def to_display_dict(self) -> Dict[str, str]:
         return {
             "Installers path": str(self.installers_path),
             "Wine prefix": str(self.wine_prefix),
             "Default installer version": self.default_version,
+            "Download URL": self.download_url or "default",
         }
 
 
 class ConfigLoader:
-    """Loads configuration from ~/.config/affinity-cli or an explicit path."""
+    """Loads configuration from ~/.config/affinity-cli, an explicit path, or environment."""
 
     CONFIG_FILES = (
         "config.toml",
@@ -58,12 +63,30 @@ class ConfigLoader:
         "config.json",
     )
 
-    def __init__(self, explicit_path: Optional[str] = None) -> None:
-        self.explicit_path = Path(explicit_path).expanduser() if explicit_path else None
+    ENV_INSTALLERS = "AFFINITY_INSTALLERS_PATH"
+    ENV_PREFIX = "AFFINITY_WINE_PREFIX"
+    ENV_VERSION = "AFFINITY_DEFAULT_VERSION"
+    ENV_DOWNLOAD_URL = "AFFINITY_DOWNLOAD_URL"
+
+    def __init__(self, explicit_path: Optional[str] = None, config_file: Optional[str] = None) -> None:
+        """
+        Args:
+            explicit_path: Backwards-compatible path argument (kept for callers)
+            config_file: Preferred keyword accepted by tests/CLI
+        """
+        chosen = config_file or explicit_path
+        self.explicit_path = Path(chosen).expanduser() if chosen else None
         self.config_path: Optional[Path] = None
         self._raw_data: Dict[str, Any] = {}
         self.user_config = UserConfig()
         self._load()
+
+    def load(self) -> ResolvedConfig:
+        """
+        Public helper used by tests and CLI entrypoint.
+        Mirrors `derive` with no overrides.
+        """
+        return self.derive()
 
     def derive(
         self,
@@ -72,33 +95,57 @@ class ConfigLoader:
         prefix_path: Optional[str] = None,
         version: Optional[str] = None,
     ) -> ResolvedConfig:
+        """
+        Resolve configuration using precedence:
+            explicit args > environment > user config file > defaults
+        """
+        env_installers = os.getenv(self.ENV_INSTALLERS)
+        env_prefix = os.getenv(self.ENV_PREFIX)
+        env_version = os.getenv(self.ENV_VERSION)
+        env_download = os.getenv(self.ENV_DOWNLOAD_URL)
+
         installers = self._normalize_path(
             installers_path
+            or env_installers
             or (self.user_config.installers_path and str(self.user_config.installers_path))
             or str(config.DEFAULT_INSTALLERS_PATH)
         )
         prefix = self._normalize_path(
             prefix_path
+            or env_prefix
             or (self.user_config.wine_prefix and str(self.user_config.wine_prefix))
             or str(config.DEFAULT_WINE_PREFIX)
         )
-        version_choice = (version or self.user_config.default_version or config.DEFAULT_INSTALLER_VERSION)
+        version_choice = (
+            (version or env_version or self.user_config.default_version or config.DEFAULT_INSTALLER_VERSION)
+        )
         version_choice = version_choice.lower()
         if version_choice not in config.SUPPORTED_INSTALLER_VERSIONS:
             raise ConfigError(
                 f"Invalid installer version '{version_choice}'. Supported values:"
                 f" {', '.join(config.SUPPORTED_INSTALLER_VERSIONS)}"
             )
-        return ResolvedConfig(installers_path=installers, wine_prefix=prefix, default_version=version_choice)
+        download_url = env_download or self.user_config.download_url
+        return ResolvedConfig(
+            installers_path=installers,
+            wine_prefix=prefix,
+            default_version=version_choice,
+            download_url=download_url,
+        )
 
     def _load(self) -> None:
         if self.explicit_path:
-            if not self.explicit_path.exists():
-                raise ConfigError(f"Config file not found: {self.explicit_path}")
-            self.config_path = self.explicit_path
-            self._raw_data = self._read_file(self.explicit_path)
-            self.user_config = self._parse_user_config(self._raw_data)
-            return
+            # If the caller asked for a specific path but it does not exist,
+            # fall back to defaults instead of crashing (friendlier UX/tests).
+            if self.explicit_path.exists():
+                self.config_path = self.explicit_path
+                self._raw_data = self._read_file(self.explicit_path)
+                self.user_config = self._parse_user_config(self._raw_data)
+                return
+            else:
+                self._raw_data = {}
+                self.user_config = UserConfig()
+                return
 
         for candidate in self.CONFIG_FILES:
             path = config.CONFIG_DIR / candidate
@@ -114,7 +161,7 @@ class ConfigLoader:
     def _parse_user_config(self, payload: Dict[str, Any]) -> UserConfig:
         if not payload:
             return UserConfig()
-        allowed = {"installers_path", "wine_prefix", "default_version"}
+        allowed = {"installers_path", "wine_prefix", "default_version", "download_url"}
         unexpected = set(payload.keys()) - allowed
         if unexpected:
             raise ConfigError(f"Unknown configuration field(s): {', '.join(sorted(unexpected))}")
@@ -129,10 +176,14 @@ class ConfigLoader:
                 raise ConfigError(
                     f"default_version must be one of {', '.join(config.SUPPORTED_INSTALLER_VERSIONS)}"
                 )
+        download_url = payload.get("download_url")
+        if download_url is not None and not isinstance(download_url, str):
+            raise ConfigError("download_url must be a string URL")
         return UserConfig(
             installers_path=installers,
             wine_prefix=prefix,
             default_version=default_version,
+            download_url=download_url,
         )
 
     def _read_file(self, path: Path) -> Dict[str, Any]:

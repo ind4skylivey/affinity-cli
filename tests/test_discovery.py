@@ -8,20 +8,22 @@ def create_installer(tmp_path: Path, name: str) -> None:
     path.write_bytes(b"dummy")
 
 
-def test_scan_and_select(tmp_path):
-    create_installer(tmp_path, "affinity-photo-1.10.6.exe")
-    create_installer(tmp_path, "affinity-photo-msi-2.6.5.exe")
-    create_installer(tmp_path, "affinity-designer-1.10.6.exe")
+def test_scan_and_select_universal(tmp_path):
+    create_installer(tmp_path, "Affinity_Universal_2.5.0.exe")
+    create_installer(tmp_path, "Affinity_Universal_2.6.1.exe")
 
     discovery = InstallerDiscovery(tmp_path)
     installers = discovery.scan()
-    assert len(installers) == 3
+    assert len(installers) == 2
 
-    selected_photo = discovery.select_installer("photo")
-    assert selected_photo.version == "v2"
+    selected = discovery.select_installer()
+    assert selected.file_version == "2.6.1"
 
-    selected_photo_v1 = discovery.select_installer("photo", "v1")
-    assert selected_photo_v1.version == "v1"
 
-    selected_designer = discovery.select_installer("designer")
-    assert selected_designer.version == "v1"
+def test_select_raises_when_missing(tmp_path):
+    discovery = InstallerDiscovery(tmp_path)
+    try:
+        discovery.select_installer()
+        assert False, "Expected FileNotFoundError"
+    except FileNotFoundError:
+        assert True
