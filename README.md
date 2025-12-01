@@ -1,5 +1,6 @@
 # Affinity CLI · v2.0.0  
-**One Command. Zero Friction.**  
+**<img width="1536" height="1024" alt="banner" src="https://github.com/user-attachments/assets/93c440de-bb9d-4e05-90d6-df211eae2ade" />
+One Command. Zero Friction.**  
 Install the Affinity Universal app on Linux with a prepared Wine environment.
 
 [![GitHub stars](https://img.shields.io/github/stars/ind4skylivey/affinity-cli?style=flat&color=blue)](https://github.com/ind4skylivey/affinity-cli)
