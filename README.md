@@ -1,6 +1,7 @@
-# Affinity CLI · v2.0.0  
-**<img width="1536" height="1024" alt="banner" src="https://github.com/user-attachments/assets/93c440de-bb9d-4e05-90d6-df211eae2ade" />
-One Command. Zero Friction.**  
+# Affinity CLI · v2.0.0
+<img width="1536" height="1024" alt="banner" src="https://github.com/user-attachments/assets/8a87fa64-581f-4bdc-b8f0-e1721fab35e9" />
+
+**One Command. Zero Friction.**
 Install the Affinity Universal app on Linux with a prepared Wine environment.
 
 [![GitHub stars](https://img.shields.io/github/stars/ind4skylivey/affinity-cli?style=flat&color=blue)](https://github.com/ind4skylivey/affinity-cli)
@@ -11,6 +12,7 @@ Install the Affinity Universal app on Linux with a prepared Wine environment.
 ---
 
 ## Why Affinity CLI?
+
 - Universal installer: downloads and runs the official Affinity Universal EXE.
 - Guided Wine setup: prepares a 64‑bit Windows 11 prefix with required components.
 - Profiles for speed vs. completeness: minimal, standard (default), full.
@@ -18,7 +20,16 @@ Install the Affinity Universal app on Linux with a prepared Wine environment.
 
 ---
 
+## Prerequisites
+
+- Python 3.8+
+- `winetricks`, `curl`, `tar`, `python3` on the host
+- Vulkan drivers if you plan to use DXVK (recommended)
+
+---
+
 ## Quick Start
+
 ```bash
 # Clone
 git clone https://github.com/ind4skylivey/affinity-cli.git
@@ -35,29 +46,69 @@ python -m pip install -e .
 # Install Affinity (default profile: standard)
 affinity-cli install
 ```
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/86b35ebb-5a4a-470e-a229-9d399819f9b5" width="600" />
-</p>
 
 ---
+<img width="1053" height="658" alt="32423451" src="https://github.com/user-attachments/assets/9aa14019-7de2-437e-8112-8f32a65e438e" />
+## Wine Runtime Setup (optional but recommended)
 
-## First run: Wine prefix preparation
+Affinity CLI can prepare a prefix on first run. If you prefer a pinned, portable runtime, use the companion repo [`affinity-wine-setup`](https://github.com/ind4skylivey/affinity-wine-setup).
+
+### Quick start
+
+```bash
+curl -LO https://raw.githubusercontent.com/ind4skylivey/affinity-wine-setup/main/setup-wine-ge.sh
+chmod +x setup-wine-ge.sh
+GE_TAG=GE-Proton10-25 ./setup-wine-ge.sh
+```
+
+This creates a clean prefix at `~/.wine-affinity`, sets Windows 10, and installs .NET 3.5 SP1, .NET 4.8, DXVK, and VKD3D using Proton-GE.
+
+### Run Affinity CLI with the prepared runtime
+
+```bash
+WINEPREFIX=$HOME/.wine-affinity \
+WINE=$HOME/.local/share/Proton-GE/GE-Proton10-25/files/bin/wine \
+affinity-cli <command>
+```
+
+### Custom options
+
+- `WINVER_TARGET`: `win10` (default) or `win11`
+- `WINEPREFIX`: destination prefix (default `~/.wine-affinity`)
+- `WINE_BIN` / `WINESERVER_BIN`: use your own Wine build; set `SKIP_DOWNLOAD=1` to skip Proton-GE download
+- `GITHUB_TOKEN`: optional, avoids GitHub API rate limits when using `latest`
+
+### Verify
+
+```bash
+WINEPREFIX=$HOME/.wine-affinity \
+WINE=$HOME/.local/share/Proton-GE/GE-Proton10-25/files/bin/wine \
+$WINE winecfg
+```
+
+If `winecfg` opens without WoW64 experimental warnings, the runtime is ready.
+
+---
+  <p align="center">
+    <img src="https://github.com/user-attachments/assets/39614f0d-4aad-4142-b855-b0f8a42154fb"
+  width="420" alt="Affinity CLI run preview" />
+  </p>
+
+## First Run: Prefix Preparation
+
 - The first `affinity-cli install` creates a dedicated 64-bit Wine prefix set to Windows 11.
 - Installs Windows components via winetricks (depending on profile).
-- The initial setup can take several minutes (10–20 on “full” profile).
+- Initial setup can take several minutes (10–20 on the “full” profile).
 - During this time you may see logs like:
   - `winetricks is still running... please wait`
   - `Preparing: C:\...\netfx_....msi...`
 - Subsequent runs reuse the prepared prefix and are much faster.
 - Do **not** close the terminal during this step.
 
-
-
-<img width="1053" height="658" alt="32423451" src="https://github.com/user-attachments/assets/f8751529-ca6d-4d65-b060-0e19dae767c4" />
-
 ---
 
-## Wine profiles
+## Wine Profiles
+
 Choose how many components to install in the prefix:
 
 - **minimal** – fastest, smallest set (advanced users): `win11, corefonts, tahoma, crypt32, d3dcompiler_47`
@@ -65,6 +116,7 @@ Choose how many components to install in the prefix:
 - **full** – maximum compatibility; first run can take 10–20 minutes: standard + `dotnet48, dxvk, vkd3d, remove_mono`
 
 Examples:
+
 ```bash
 affinity-cli install --wine-profile minimal
 affinity-cli install --wine-profile standard   # default
@@ -77,8 +129,9 @@ AFFINITY_WINE_PROFILE=full affinity-cli install
 ---
 
 ## Commands
+
 ```bash
-affinity-cli install             # preflight -> prepare prefix -> download/run installer -> verify
+affinity-cli install                      # preflight -> prepare prefix -> download/run installer -> verify
 affinity-cli install --preflight-only
 affinity-cli install --dry-run
 affinity-cli install --silent
@@ -88,64 +141,28 @@ affinity-cli install --wine-profile minimal|standard|full
 ```
 
 ---
-## Wine runtime setup (required for Affinity installers)
 
-  We provide a portable Wine bootstrap in the companion repo [`affinity-wine-setup`](https://
-  github.com/ind4skylivey/affinity-wine-setup).
-
-  ### Quick start
-
-  curl -LO https://raw.githubusercontent.com/ind4skylivey/affinity-wine-setup/main/setup-wine-
-  ge.sh
-  chmod +x setup-wine-ge.sh
-  GE_TAG=GE-Proton10-25 ./setup-wine-ge.sh
-
-  This creates a clean prefix at ~/.wine-affinity, sets Windows 10, installs .NET 3.5 SP1 / .NET
-  4.8, DXVK, and VKD3D using Proton-GE.
-
-  ### Run Affinity CLI with the prepared runtime
-
-  WINEPREFIX=$HOME/.wine-affinity \
-  WINE=$HOME/.local/share/Proton-GE/GE-Proton10-25/files/bin/wine \
-  affinity-cli <command>
-
-  ### Custom options
-
-  - WINVER_TARGET: win10 (default) or win11
-  - WINEPREFIX: destination prefix (default ~/.wine-affinity)
-  - WINE_BIN / WINESERVER_BIN: use your own Wine build; set SKIP_DOWNLOAD=1 to skip Proton-
-    GE download
-  - GITHUB_TOKEN: optional, avoids GitHub API rate limits when using latest
-
-  ### Verify
-
-  WINEPREFIX=$HOME/.wine-affinity \
-  WINE=$HOME/.local/share/Proton-GE/GE-Proton10-25/files/bin/wine \
-  $WINE winecfg
-
-  If winecfg opens without WoW64 experimental warnings, the runtime is ready.
-
-
-  All in English and no extra summary files, per project rules. You can pin `GE_TAG` to newer
-  releases later—just update the example tag.
 ## Troubleshooting
-- Windows version warning: If the installer complains, rerun with a clean prefix or try the **full** profile.
-- Logs: set `AFFINITY_CLI_LOG=DEBUG` and re-run.
+
+- Windows version warning: rerun with a clean prefix or try the **full** profile.
+- Logs: set `AFFINITY_CLI_LOG=DEBUG` and rerun.
 - Download issues: use `--download-url` or set `AFFINITY_DOWNLOAD_URL`.
 
 ---
 
 ## Roadmap
-- Pre-built Wine runtime & prefix: optional downloadable, pre-configured runtime/prefix to make the first install even faster and more consistent.
+
+- Pre-built Wine runtime & prefix: optional downloadable, pre-configured runtime/prefix to speed up first install.
 
 ---
 
 ## License
+
 MIT License. See [LICENSE](LICENSE).
 
 ---
 
 ## Acknowledgments
 
-Wine, DXVK, VKD3D and all contributors keeping this stack alive on Linux.
-Everyone opening issues, testing early builds and sharing feedback – every report is a seed that helps Affinity-Cli grow.
+- Wine, DXVK, VKD3D and all contributors.
+- Everyone opening issues, testing builds, and sharing feedback.
