@@ -6,7 +6,7 @@ Install the Affinity Universal app on Linux with a prepared Wine environment.
 
 [![Release](https://img.shields.io/github/v/release/ind4skylivey/affinity-cli?label=release&color=blueviolet)](https://github.com/ind4skylivey/affinity-cli/releases/tag/v2.0.0)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![License](https://img.shields.io/github/license/ind4skylivey/affinity-cli?color=blue)](LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![Wine](https://img.shields.io/badge/Wine-10.x-red?logo=wine&logoColor=white)](https://www.winehq.org/)
 
 ---
@@ -166,3 +166,26 @@ MIT License. See [LICENSE](LICENSE).
 
 - Wine, DXVK, VKD3D and all contributors.
 - Everyone opening issues, testing builds, and sharing feedback.
+
+
+## 🌑 Why We Do This
+
+Native Linux support shouldn't be a luxury, yet we often find ourselves as the forgotten ones—the children of the night in the creative software world. 
+
+It costs nothing to acknowledge the Linux community, but since the industry won't build it for us, **we build it ourselves.**
+
+Affinity-Cli exists to bridge that gap. We implement what others ignore, proving that creativity has no OS boundaries. If they won't give us the tools, we'll forge the path to run them anyway.
+
+*For the creators, the hackers, and the forgotten ones.*
+
+## 🤝 Community & Support
+
+Affinity-Cli is an open-source project built by and for the Linux creative community.
+
+- **Found a bug?** Please [open an issue](https://github.com/ind4skylivey/affinity-cli/issues) with your logs and distribution details.
+- **Have an idea?** We welcome feature requests and pull requests!
+- **Wine trouble?** Wine configuration can be tricky. If you encounter specific Wine errors, check the [Troubleshooting](#troubleshooting) section or try using a clean prefix.
+
+This project is not affiliated with Serif (Affinity). It is a community tool to help you run the software you own on the OS you love.
+
+
