@@ -59,7 +59,15 @@ class PrefixPreparer:
         marker = self.prefix_path / self.marker_name
         previous_profile = marker.read_text(encoding="utf-8").strip() if marker.exists() else None
 
-        target_components = self.PROFILE_COMPONENTS[self.profile]
+        profile = self.profile or "standard"
+
+        if profile not in self.PROFILE_COMPONENTS:
+            console.print("[bold red]Error: invalid or missing Wine profile.[/bold red]")
+            console.print("Valid options are: minimal, standard, full.")
+            console.print("You can also force one with: AFFINITY_WINE_PROFILE=standard affinity-cli install")
+            raise SystemExit(1)
+
+        target_components = self.PROFILE_COMPONENTS[profile]
         previous_components: List[str] = self.PROFILE_COMPONENTS.get(previous_profile, []) if previous_profile else []
         missing_components = [c for c in target_components if c not in previous_components]
 
