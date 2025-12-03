@@ -89,10 +89,30 @@ $WINE winecfg
 If `winecfg` opens without WoW64 experimental warnings, the runtime is ready.
 
 ---
-  <p align="center">
-    <img src="https://github.com/user-attachments/assets/39614f0d-4aad-4142-b855-b0f8a42154fb"
-  width="420" alt="Affinity CLI run preview" />
-  </p>
+## Screenshots
+
+### CLI workflow
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/39614f0d-4aad-4142-b855-b0f8a42154fb"
+       width="420"
+       alt="Affinity CLI running install workflow in terminal" />
+</p>
+
+### Affinity running on Linux
+
+<img
+  src="https://github.com/user-attachments/assets/aa766d18-0b77-42f0-a3d4-16639da6f04f"
+  width="900"
+  alt="Affinity Universal installer and Affinity apps running on Linux desktop"
+/>
+
+<img
+  src="https://github.com/user-attachments/assets/edf2c1af-aa0a-4042-ba88-5f7afd9e3e77"
+  width="900"
+  alt="Affinity Photo running on Linux with Affinity CLI setup"
+/>
+
 
 ## First Run: Prefix Preparation
 
