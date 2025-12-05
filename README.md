@@ -47,6 +47,27 @@ python -m pip install -e .
 affinity-cli install
 ```
 
+## Developer install (from git)
+
+```bash
+git clone https://github.com/ind4skylivey/affinity-cli.git
+cd affinity-cli
+git checkout release/v2.0.0
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
+Upgrading from an older checkout? Run:
+
+```bash
+git pull
+rm -rf .venv
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+```
+
 ---
 <img width="1053" height="658" alt="32423451" src="https://github.com/user-attachments/assets/9aa14019-7de2-437e-8112-8f32a65e438e" />
 ## Wine Runtime Setup (optional but recommended)
@@ -207,5 +228,3 @@ Affinity-Cli is an open-source project built by and for the Linux creative commu
 - **Wine trouble?** Wine configuration can be tricky. If you encounter specific Wine errors, check the [Troubleshooting](#troubleshooting) section or try using a clean prefix.
 
 This project is not affiliated with Serif (Affinity). It is a community tool to help you run the software you own on the OS you love.
-
-

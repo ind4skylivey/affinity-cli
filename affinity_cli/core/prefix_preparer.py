@@ -57,39 +57,44 @@ class PrefixPreparer:
     def prepare(self, console) -> None:
         """Prepare the prefix to match the AffinityOnLinux Wine guide."""
         marker = self.prefix_path / self.marker_name
-        previous_profile = marker.read_text(encoding="utf-8").strip() if marker.exists() else None
+        previous_profile = None
+        if marker.exists():
+            try:
+                previous_profile = marker.read_text(encoding="utf-8").strip()
+            except (OSError, UnicodeDecodeError) as exc:
+                logger.debug("Ignoring unreadable marker %s: %s", marker, exc)
 
         profile = self.profile or "standard"
 
         if profile not in self.PROFILE_COMPONENTS:
             console.print("[bold red]Error: invalid or missing Wine profile.[/bold red]")
             console.print("Valid options are: minimal, standard, full.")
-            console.print("You can also force one with: AFFINITY_WINE_PROFILE=standard affinity-cli install")
+            console.print("You can force one with: AFFINITY_WINE_PROFILE=standard affinity-cli install")
             raise SystemExit(1)
 
         target_components = self.PROFILE_COMPONENTS[profile]
         previous_components: List[str] = self.PROFILE_COMPONENTS.get(previous_profile, []) if previous_profile else []
         missing_components = [c for c in target_components if c not in previous_components]
 
-        if previous_profile == self.profile and not missing_components:
-            logger.info("Prefix already prepared with profile '%s' (marker found at %s)", self.profile, marker)
+        if previous_profile == profile and not missing_components:
+            logger.info("Prefix already prepared with profile '%s' (marker found at %s)", profile, marker)
             return
 
         console.print("[cyan]Preparing Wine prefix for Affinity (win11, DXVK/vkd3d, core runtimes)...[/cyan]")
         self._set_windows_version("win11")
         if missing_components:
             note = ""
-            if self.profile == "full":
+            if profile == "full":
                 note = " (this may take several minutes: dotnet48 + DXVK/VKD3D)"
             console.print(
-                f"[cyan]Wine profile: {self.profile}[/cyan] {note}\n"
+                f"[cyan]Wine profile: {profile}[/cyan] {note}\n"
                 f"Installing Wine components: {', '.join(missing_components)}"
             )
             self._install_winetricks_components(missing_components, console)
         else:
-            console.print(f"[green]No additional components needed for profile '{self.profile}'.[/green]")
+            console.print(f"[green]No additional components needed for profile '{profile}'.[/green]")
         self._set_windows_version_registry("win11")
-        self._touch_marker(marker, self.profile)
+        self._touch_marker(marker, profile)
         console.print("[green]Prefix preparation complete.[/green]")
 
     # ---------------- internal helpers ---------------- #
