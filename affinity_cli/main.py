@@ -10,12 +10,12 @@ import click
 from rich.console import Console
 from rich.panel import Panel
 
-from affinity_cli import __version__, config
+from affinity_cli import config, get_version
 from affinity_cli.core.config_loader import ConfigError, ConfigLoader
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="affinity-cli")
+@click.version_option(version=get_version(), prog_name="affinity-cli")
 @click.option(
     "--config",
     "config_file",
