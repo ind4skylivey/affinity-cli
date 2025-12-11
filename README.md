@@ -254,6 +254,6 @@ Native Linux support shouldn't be a luxury. If this tool helped you ditch Window
 <img src=".github/assets/btc-qr.png" width="160" alt="BTC QR">
 <img src=".github/assets/eth-qr.png" width="160" alt="ETH QR">
 <img src=".github/assets/sol-qr.png" width="160" alt="SOL QR">
-<img src=".github/assets/xmr-qr.png" width="160" alt="XMR QR">
+<img src=".github/assets/xmr-qr.png?v=1" width="160" alt="XMR QR">
 
 </div>
