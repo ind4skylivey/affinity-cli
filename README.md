@@ -247,11 +247,13 @@ Native Linux support shouldn't be a luxury. If this tool helped you ditch Window
 [![BTC](https://img.shields.io/badge/Bitcoin-bc1q...fur5k-f7931a?style=flat-square&logo=bitcoin)](https://mempool.space/address/bc1qg4he7nyq4j5r8mzq23e8shqvtvuymtmq5fur5k)
 [![ETH](https://img.shields.io/badge/Ethereum-0x21...b765-627eea?style=flat-square&logo=ethereum)](https://etherscan.io/address/0x21C8864A17324e907A7DCB8d70cD2C5030c5b765)
 [![SOL](https://img.shields.io/badge/Solana-BS3N...2e4-9945FF?style=flat-square&logo=solana)](https://solscan.io/account/BS3Nze14rdkPQQ8UkQZP4SU8uSc6de3UaVmv8gqh52e4)
+[![XMR](https://img.shields.io/badge/Monero-86dX...FJs-ff6600?style=flat-square&logo=monero&logoColor=white)](https://www.getmonero.org/)
 
 <br>
 
 <img src=".github/assets/btc-qr.png" width="160" alt="BTC QR">
 <img src=".github/assets/eth-qr.png" width="160" alt="ETH QR">
 <img src=".github/assets/sol-qr.png" width="160" alt="SOL QR">
+<img src=".github/assets/xmr-qr.png" width="160" alt="XMR QR">
 
 </div>
