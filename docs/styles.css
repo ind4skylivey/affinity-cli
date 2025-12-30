@@ -173,6 +173,37 @@ main {
   color: var(--text);
 }
 
+.subnav {
+  position: sticky;
+  top: 70px;
+  z-index: 9;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 14px 0 18px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(5, 9, 14, 0.9);
+  backdrop-filter: blur(10px);
+}
+
+.subnav-chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.subnav-chip:hover {
+  border-color: var(--cyan);
+  transform: translateY(-1px);
+}
+
 .topbar {
   position: sticky;
   top: 0;
