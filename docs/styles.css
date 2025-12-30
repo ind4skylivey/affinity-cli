@@ -106,17 +106,28 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(5, 9, 14, 0.32), rgba(10, 20, 30, 0.24) 40%, rgba(7, 11, 20, 0.36));
+  background: linear-gradient(120deg, rgba(5, 9, 14, 0.72), rgba(10, 20, 30, 0.62) 45%, rgba(7, 11, 20, 0.78));
 }
 
 body.theme-light .front-hero::after {
-  background: linear-gradient(120deg, rgba(248, 251, 255, 0.18), rgba(241, 245, 255, 0.18) 40%, rgba(236, 244, 255, 0.24));
+  background: linear-gradient(120deg, rgba(248, 251, 255, 0.72), rgba(241, 245, 255, 0.62) 45%, rgba(236, 244, 255, 0.78));
 }
 
 .front-hero__content {
   position: relative;
   z-index: 1;
   max-width: 760px;
+  padding: 18px 18px 14px;
+  border-radius: 16px;
+  background: rgba(5, 9, 14, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.theme-light .front-hero__content {
+  background: rgba(255, 255, 255, 0.72);
+  border-color: rgba(0, 0, 0, 0.04);
+  box-shadow: 0 12px 28px rgba(18, 42, 76, 0.22);
 }
 
 .front-hero__content h1 {
