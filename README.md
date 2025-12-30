@@ -192,6 +192,14 @@ affinity-cli install --wine-profile minimal|standard|full
 
 ---
 
+## Docker (Experimental ⚠️)
+
+![Affinity-CLI meets Docker](.github/assets/affinity-docker-fail.png)
+
+> *Users are experimenting with container recipes. Contributions welcome!*
+
+---
+
 ## Troubleshooting
 
 - Windows version warning: rerun with a clean prefix or try the **full** profile.
