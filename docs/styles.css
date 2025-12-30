@@ -510,7 +510,7 @@ main {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: #0b1323;
-  padding: 10px 10px 10px 12px;
+  padding: 12px 88px 12px 12px;
   font-family: var(--font-mono);
   color: #e8f4ff;
   overflow: hidden;
@@ -518,13 +518,22 @@ main {
 
 .copy-btn.tiny {
   position: absolute;
-  right: 8px;
-  top: 8px;
-  padding: 6px 10px;
+  right: 10px;
+  top: 10px;
+  padding: 6px 12px;
   font-size: 12px;
+  background: rgba(97, 231, 255, 0.14);
+  border: 1px solid var(--cyan);
+  border-radius: 10px;
 }
 
-.mini-code code { font-size: 13px; }
+.mini-code code {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
 
 .card.holo {
   background: var(--bg-holo);
