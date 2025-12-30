@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Affinity CLI | Linux-first Installer</title>
+  <meta name="description" content="Install the Affinity Universal app on Linux with a tuned Wine stack, gamer-grade visuals, and single-command setup.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="scanline" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">~/</span>
+      <span class="brand-name">Affinity CLI</span>
+    </div>
+    <nav class="nav">
+      <a href="#quickstart">Quickstart</a>
+      <a href="#profiles">Profiles</a>
+      <a href="#flow">Flow</a>
+      <a href="#compat">Compat</a>
+      <a class="chip" href="https://github.com/ind4skylivey/affinity-cli" target="_blank" rel="noreferrer">GitHub -></a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero__copy">
+        <p class="eyebrow">Linux-first / Wine tuned / Neon fast</p>
+        <h1>One command. Zero friction.</h1>
+        <p class="lede">Install the Affinity Universal app on Linux with a hardened Wine stack, selectable profiles, and gamer-grade UX.</p>
+        <div class="cta-row">
+          <button class="btn btn-primary" data-copy="pip install affinity-cli">Copy install command</button>
+          <a class="btn btn-ghost" href="https://github.com/ind4skylivey/affinity-cli#quick-start" target="_blank" rel="noreferrer">Read the full README</a>
+        </div>
+        <div class="badge-row">
+          <span class="badge">Python 3.8+</span>
+          <span class="badge">Wine 10.x ready</span>
+          <span class="badge">Profiles: minimal / standard / full</span>
+        </div>
+      </div>
+      <div class="hero__panel">
+        <div class="panel-header">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="panel-title">install.sh</span>
+        </div>
+        <pre class="terminal"><code>$ python -m venv .venv
+$ source .venv/bin/activate
+$ pip install -e .
+$ affinity-cli install --wine-profile standard
+> prepping Wine 11  /  installing vc runtime  /  pulling Affinity Universal
+OK ready to launch</code></pre>
+        <div class="panel-footer">Optimized for KDE Plasma, GNOME, Hyprland, and tiling WMs.</div>
+      </div>
+    </section>
+
+    <section id="quickstart" class="grid two">
+      <div class="card">
+        <div class="card-label">Quickstart</div>
+        <h2>From clone to install in under 60 seconds.</h2>
+        <p>Drop this project onto GitHub Pages or run it locally; the CLI remains the same. Paste the command below to bootstrap.</p>
+        <div class="code-block">
+          <button class="copy-btn" data-copy="git clone https://github.com/ind4skylivey/affinity-cli.git\ncd affinity-cli\npython3 -m venv .venv\nsource .venv/bin/activate\npip install -e .\naffinity-cli install">Copy</button>
+          <pre><code>git clone https://github.com/ind4skylivey/affinity-cli.git
+cd affinity-cli
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+affinity-cli install</code></pre>
+        </div>
+      </div>
+      <div class="card holo">
+        <div class="card-label">Why it slaps</div>
+        <ul class="feature-list">
+          <li><span>Guided Wine prep</span><small>64-bit prefix, Windows 11 target, DXVK/VKD3D optional.</small></li>
+          <li><span>Profiles on tap</span><small>Minimal, standard, or full component stacks.</small></li>
+          <li><span>Logged & scriptable</span><small>Non-interactive flow with clear preflight checks.</small></li>
+          <li><span>Linux-native vibes</span><small>No vendor GUI; stays keyboard-first and theme-friendly.</small></li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="profiles" class="section">
+      <div class="section-header">
+        <p class="eyebrow">Tuned for your rig</p>
+        <h2>Pick a Wine profile.</h2>
+      </div>
+      <div class="profile-grid">
+        <article class="profile-card">
+          <div class="pill">minimal</div>
+          <h3>Speedrun</h3>
+          <p>Essential components only - ideal for advanced users who want the lightest footprint.</p>
+          <ul>
+            <li>Windows 11 target</li>
+            <li>corefonts, tahoma, crypt32</li>
+            <li>d3dcompiler_47</li>
+          </ul>
+        </article>
+        <article class="profile-card hot">
+          <div class="pill">standard</div>
+          <h3>Balanced (default)</h3>
+          <p>The recommended stack: great compatibility without long prep times.</p>
+          <ul>
+            <li>Everything in minimal</li>
+            <li>vcrun2022</li>
+            <li>~10-12 minutes on first run</li>
+          </ul>
+        </article>
+        <article class="profile-card">
+          <div class="pill">full</div>
+          <h3>Maximum compatibility</h3>
+          <p>Longest initial prep, but removes friction for demanding Affinity features.</p>
+          <ul>
+            <li>Standard stack</li>
+            <li>dotnet48, dxvk, vkd3d</li>
+            <li>mono removal, tuned for gaming GPUs</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="flow" class="grid two">
+      <div class="card">
+        <div class="card-label">Execution Flow</div>
+        <ol class="flow-list">
+          <li><strong>Preflight:</strong> checks Python, Wine, disk space, network.</li>
+          <li><strong>Prefix prep:</strong> configures 64-bit Wine, Windows 11, fonts, crypto libs.</li>
+          <li><strong>Components:</strong> installs per-profile packages (vcrun, DXVK, .NET).</li>
+          <li><strong>Installer:</strong> downloads Affinity Universal and runs silent install.</li>
+          <li><strong>Verify:</strong> sanity checks; re-run is fast with cached prefix.</li>
+        </ol>
+      </div>
+      <div class="card holo">
+        <div class="card-label">Runtime friendly</div>
+        <p class="lede">Runs clean on KDE, GNOME, Hyprland, Sway, i3, and other compositors. Logs stay readable on dark terminals, and the default palette follows the site's neon-green/ice-blue aesthetic.</p>
+        <div class="pill-row">
+          <span class="pill">Works offline after download</span>
+          <span class="pill">DXVK ready</span>
+          <span class="pill">No root required for CLI</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="compat" class="section">
+      <div class="section-header">
+        <p class="eyebrow">Compatibility</p>
+        <h2>Plays nice with modern Linux desktops.</h2>
+        <p class="muted">Tested on Arch, Fedora, Debian derivatives, and NixOS (flake users welcome). Vulkan-capable GPUs recommended for DXVK.</p>
+      </div>
+      <div class="compat-grid">
+        <div class="stat">
+          <span class="stat-num">3.10+</span>
+          <span class="stat-label">Python</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">10.x</span>
+          <span class="stat-label">Wine</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">0 -> GO</span>
+          <span class="stat-label">Interaction debt</span>
+        </div>
+        <div class="stat">
+          <span class="stat-num">MIT</span>
+          <span class="stat-label">License</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="media">
+      <div class="section-header">
+        <p class="eyebrow">See it in action</p>
+        <h2>Real installs on Linux desktops.</h2>
+      </div>
+      <div class="media-grid">
+        <img src="https://github.com/user-attachments/assets/39614f0d-4aad-4142-b855-b0f8a42154fb" alt="Terminal install workflow" loading="lazy">
+        <img src="https://github.com/user-attachments/assets/aa766d18-0b77-42f0-a3d4-16639da6f04f" alt="Affinity apps running on Linux" loading="lazy">
+        <img src="https://github.com/user-attachments/assets/edf2c1af-aa0a-4042-ba88-5f7afd9e3e77" alt="Affinity Photo running via Wine" loading="lazy">
+      </div>
+    </section>
+
+    <section class="faq">
+      <div class="section-header">
+        <p class="eyebrow">FAQ</p>
+        <h2>Stay in control.</h2>
+      </div>
+      <div class="qa">
+        <h3>Does it touch my existing Wine prefix?</h3>
+        <p>No. It uses its own prefix (default: <code>~/.wine-affinity</code>) so your other Wine apps stay untouched.</p>
+      </div>
+      <div class="qa">
+        <h3>Can I skip downloads if I already have Proton-GE?</h3>
+        <p>Yes. Set <code>SKIP_DOWNLOAD=1</code> and point <code>WINE</code>/<code>WINESERVER</code> at your binaries.</p>
+      </div>
+      <div class="qa">
+        <h3>Where do I enable GitHub Pages?</h3>
+        <p>GitHub -> Settings -> Pages -> Deploy from branch -> pick <code>main</code> (or your default) and <code>/docs</code> as the folder. Save, wait for the green check, and your site is live.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>
+      <span class="brand-mark">></span> Affinity CLI - Linux gamers welcome.
+    </div>
+    <div class="footer-links">
+      <a href="https://github.com/ind4skylivey/affinity-cli" target="_blank" rel="noreferrer">GitHub</a>
+      <a href="https://github.com/ind4skylivey/affinity-cli/issues" target="_blank" rel="noreferrer">Issues</a>
+      <a href="mailto:contact@localhost" aria-label="contact" class="muted">Contact</a>
+    </div>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

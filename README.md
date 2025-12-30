@@ -198,6 +198,16 @@ affinity-cli install --wine-profile minimal|standard|full
 
 > *Users are experimenting with container recipes. Contributions welcome!*
 
+## GitHub Pages site
+
+Static marketing page lives in `docs/` for GitHub Pages. To publish:
+
+1. Push `docs/` to your default branch.
+2. GitHub → Settings → Pages → Deploy from branch → select your default branch + `/docs`.
+3. Wait for the green check; your site will be available at `https://<user>.github.io/affinity-cli/`.
+
+`docs/index.html` uses no build step—pure HTML/CSS/JS with a neon gamer/Linux theme. Edit and push to redeploy.
+
 ---
 
 ## Troubleshooting
