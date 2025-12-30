@@ -88,7 +88,7 @@ main {
 .front-hero {
   position: relative;
   overflow: hidden;
-  min-height: 88vh;
+  min-height: 90vh;
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -105,11 +105,21 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, rgba(5, 9, 14, 0.82) 45%, rgba(5, 9, 14, 0.4) 60%, rgba(5, 9, 14, 0.2) 75%);
+  background: linear-gradient(100deg,
+    rgba(5, 9, 14, 0.92) 0%,
+    rgba(5, 9, 14, 0.88) 45%,
+    rgba(5, 9, 14, 0.55) 65%,
+    rgba(5, 9, 14, 0.40) 80%);
+  backdrop-filter: blur(2px);
 }
 
 body.theme-light .front-hero::after {
-  background: linear-gradient(110deg, rgba(248, 251, 255, 0.82) 45%, rgba(248, 251, 255, 0.55) 60%, rgba(248, 251, 255, 0.35) 75%);
+  background: linear-gradient(100deg,
+    rgba(248, 251, 255, 0.94) 0%,
+    rgba(248, 251, 255, 0.88) 45%,
+    rgba(248, 251, 255, 0.62) 65%,
+    rgba(248, 251, 255, 0.42) 80%);
+  backdrop-filter: blur(2px);
 }
 
 .front-hero__content {
@@ -117,17 +127,24 @@ body.theme-light .front-hero::after {
   z-index: 1;
   max-width: 620px;
   margin-right: clamp(24px, 8vw, 80px);
-  padding: 22px 22px 18px;
-  border-radius: 20px;
-  background: rgba(5, 9, 14, 0.68);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.42);
+  padding: 24px 26px 22px;
+  border-radius: 22px;
+  background: rgba(5, 9, 14, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(6px);
 }
 
 .theme-light .front-hero__content {
-  background: rgba(255, 255, 255, 0.86);
+  background: rgba(255, 255, 255, 0.94);
   border-color: rgba(0, 0, 0, 0.08);
-  box-shadow: 0 18px 40px rgba(18, 42, 76, 0.2);
+  box-shadow: 0 20px 48px rgba(18, 42, 76, 0.24);
+}
+
+.front-hero__content h1,
+.front-hero__content p,
+.front-hero__content .eyebrow {
+  text-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
 
 .front-hero__content h1 {
