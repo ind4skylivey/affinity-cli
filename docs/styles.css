@@ -919,12 +919,281 @@ body.theme-light .topbar {
 
 .muted { color: var(--muted); }
 
+/* ============================================
+   SCROLL ANIMATIONS
+   ============================================ */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-card {
+  transition-delay: var(--stagger-delay, 0s);
+}
+
+/* ============================================
+   ACTIVE NAVIGATION
+   ============================================ */
+.nav a.active,
+.subnav-chip.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(141, 245, 116, 0.1);
+}
+
+body.theme-light .nav a.active,
+body.theme-light .subnav-chip.active {
+  color: var(--accent);
+  background: rgba(42, 150, 104, 0.1);
+}
+
+/* ============================================
+   3D CARD HOVER EFFECTS
+   ============================================ */
+.card,
+.profile-card,
+.trading-card,
+.matrix-card {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.3s ease,
+              border-color 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card:hover,
+.profile-card:hover,
+.trading-card:hover,
+.matrix-card:hover {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35),
+              0 0 40px rgba(118, 233, 255, 0.08);
+  border-color: var(--cyan);
+}
+
+body.theme-light .card:hover,
+body.theme-light .profile-card:hover,
+body.theme-light .trading-card:hover,
+body.theme-light .matrix-card:hover {
+  box-shadow: 0 20px 50px rgba(18, 42, 76, 0.18),
+              0 0 30px rgba(0, 122, 204, 0.06);
+}
+
+/* ============================================
+   BUTTON RIPPLE EFFECT
+   ============================================ */
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  animation: ripple-effect 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.btn.copied {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+/* ============================================
+   CURSOR GLOW EFFECT
+   ============================================ */
+.cursor-glow {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(118, 233, 255, 0.08), transparent 70%);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+body.theme-light .cursor-glow {
+  background: radial-gradient(circle, rgba(0, 122, 204, 0.05), transparent 70%);
+}
+
+/* ============================================
+   PARALLAX HERO BANNER
+   ============================================ */
+.front-hero__banner img {
+  transition: transform 0.1s linear;
+  will-change: transform;
+}
+
+/* ============================================
+   COMMAND PILL TYPING CURSOR
+   ============================================ */
+.command-pill span {
+  display: inline-block;
+  border-right: 2px solid var(--accent);
+  animation: cursor-blink 1s step-end infinite;
+}
+
+@keyframes cursor-blink {
+  50% { border-color: transparent; }
+}
+
+/* ============================================
+   GLOW EFFECTS
+   ============================================ */
+.btn-primary {
+  position: relative;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  opacity: 0;
+  z-index: -1;
+  filter: blur(12px);
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::before {
+  opacity: 0.4;
+}
+
+/* ============================================
+   SECTION DIVIDERS
+   ============================================ */
+.section::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+}
+
+/* ============================================
+   ENHANCED CHIPS
+   ============================================ */
+.chip-soft {
+  transition: all 0.2s ease;
+}
+
+.chip-soft:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(97, 231, 255, 0.15);
+  border-color: var(--cyan);
+}
+
+/* ============================================
+   PROFILE CARD HOT GLOW
+   ============================================ */
+.profile-card.hot::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  opacity: 0.15;
+  z-index: -1;
+  filter: blur(20px);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.25; transform: scale(1.02); }
+}
+
+/* ============================================
+   TECH BADGES HOVER
+   ============================================ */
+.tech-badge {
+  transition: all 0.25s ease;
+  cursor: default;
+}
+
+.tech-badge:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* ============================================
+   FOOTER ENHANCEMENT
+   ============================================ */
+.footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 64px;
+  padding: 24px min(6vw, 64px) 36px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+body.theme-light .footer {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.footer-links {
+  display: flex;
+  gap: 14px;
+}
+
+.footer a {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.footer a:hover {
+  color: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 720px) {
   .topbar { position: sticky; }
   .nav { gap: 12px; font-size: 13px; }
   .hero { padding: 24px; }
+  .front-hero__content { padding: 24px; }
+  .cursor-glow { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation: none !important; transition: none !important; }
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
 }
