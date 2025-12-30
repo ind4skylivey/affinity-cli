@@ -32,3 +32,31 @@ scrollButtons.forEach((btn) => {
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+const body = document.body;
+const toggle = document.getElementById('theme-toggle');
+const savedTheme = localStorage.getItem('affinity-theme');
+
+function applyTheme(mode) {
+  if (mode === 'light') {
+    body.classList.add('theme-light');
+    toggle.textContent = 'Dark';
+  } else {
+    body.classList.remove('theme-light');
+    toggle.textContent = 'Light';
+  }
+  localStorage.setItem('affinity-theme', mode);
+}
+
+if (savedTheme === 'light') {
+  applyTheme('light');
+} else {
+  applyTheme('dark');
+}
+
+if (toggle) {
+  toggle.addEventListener('click', () => {
+    const next = body.classList.contains('theme-light') ? 'dark' : 'light';
+    applyTheme(next);
+  });
+}

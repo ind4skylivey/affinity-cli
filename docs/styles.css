@@ -1,19 +1,35 @@
 :root {
-  --bg-0: #05090e;
-  --bg-1: #0b1624;
-  --bg-card: rgba(12, 22, 38, 0.88);
-  --bg-holo: linear-gradient(135deg, rgba(94, 255, 195, 0.18), rgba(97, 232, 255, 0.1) 40%, rgba(230, 0, 122, 0.12));
-  --text: #e8f1ff;
-  --muted: #9eb4ce;
-  --accent: #7cff6b;
-  --cyan: #61e7ff;
-  --pink: #e6007a;
-  --border: #1f3655;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  --bg-0: #080c14;
+  --bg-1: #0f1a28;
+  --bg-card: rgba(16, 28, 44, 0.9);
+  --bg-holo: linear-gradient(135deg, rgba(124, 255, 107, 0.18), rgba(97, 232, 255, 0.12) 40%, rgba(230, 0, 122, 0.12));
+  --surface-soft: rgba(20, 32, 46, 0.85);
+  --text: #eaf2ff;
+  --muted: #a8b9d4;
+  --accent: #8df574;
+  --cyan: #76e9ff;
+  --pink: #f36edc;
+  --border: #234065;
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
   --radius: 18px;
   --font-display: "Chakra Petch", "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-body: "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-mono: "IBM Plex Mono", "Fira Code", monospace;
+}
+
+body.theme-light {
+  --bg-0: #f8fbff;
+  --bg-1: #f1f5ff;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-holo: linear-gradient(135deg, rgba(140, 190, 255, 0.25), rgba(247, 217, 255, 0.2));
+  --surface-soft: rgba(255, 255, 255, 0.85);
+  --text: #1c2533;
+  --muted: #4f5b73;
+  --accent: #4ac18b;
+  --cyan: #43b5ff;
+  --pink: #d567ff;
+  --border: #d6e2f5;
+  --shadow: 0 12px 36px rgba(18, 42, 76, 0.15);
 }
 
 * {
@@ -25,9 +41,9 @@ body {
   min-height: 100vh;
   font-family: var(--font-body);
   color: var(--text);
-  background: radial-gradient(circle at 20% 20%, rgba(124, 255, 107, 0.08), transparent 20%),
-              radial-gradient(circle at 80% 0%, rgba(97, 231, 255, 0.08), transparent 25%),
-              linear-gradient(135deg, var(--bg-0), var(--bg-1) 60%, #050810);
+  background: radial-gradient(circle at 22% 18%, rgba(124, 255, 107, 0.08), transparent 22%),
+              radial-gradient(circle at 78% 10%, rgba(97, 231, 255, 0.1), transparent 28%),
+              linear-gradient(135deg, var(--bg-0), var(--bg-1) 60%, #0b1220);
   overflow-x: hidden;
 }
 
@@ -210,7 +226,7 @@ main {
   align-items: center;
   justify-content: space-between;
   padding: 18px min(6vw, 64px);
-  background: rgba(5, 9, 14, 0.8);
+  background: rgba(5, 9, 14, 0.82);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
 }
@@ -252,6 +268,23 @@ main {
 
 .nav .chip { padding: 8px 14px; }
 
+.theme-toggle {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-soft);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 13px;
+  transition: transform 120ms ease, border-color 120ms ease;
+}
+
+.theme-toggle:hover {
+  transform: translateY(-1px);
+  border-color: var(--cyan);
+}
+
 .hero {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -261,7 +294,7 @@ main {
   padding: 32px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background: linear-gradient(135deg, rgba(12, 24, 38, 0.9), rgba(10, 20, 30, 0.8));
+  background: linear-gradient(135deg, rgba(20, 32, 46, 0.9), rgba(12, 24, 38, 0.82));
   box-shadow: var(--shadow);
 }
 
