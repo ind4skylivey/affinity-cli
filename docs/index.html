@@ -20,7 +20,9 @@
       <span class="brand-name">Affinity CLI</span>
     </div>
     <nav class="nav">
+      <a href="#home">Home</a>
       <a href="#quickstart">Quickstart</a>
+      <a href="#install">Install</a>
       <a href="#profiles">Profiles</a>
       <a href="#flow">Flow</a>
       <a href="#compat">Compat</a>
@@ -48,6 +50,114 @@
         <span>$ affinity-cli install</span>
       </div>
       <button class="scroll-hint" data-scroll="#quickstart" aria-label="Scroll to quickstart">Scroll</button>
+    </section>
+
+    <section id="install" class="section">
+      <div class="section-header">
+        <p class="eyebrow">Install</p>
+        <h2>Compatibility matrix.</h2>
+        <p class="muted">Distros verified with the current Affinity CLI flow. Others likely work; these are tested.</p>
+      </div>
+      <div class="matrix">
+        <div class="matrix-card">
+          <div class="logo bubble arch"></div>
+          <div>
+            <h3>Arch / EndeavourOS</h3>
+            <p>Rolling release with pacman + yay. Latest Wine and DXVK from repos or Chaotic-AUR.</p>
+          </div>
+        </div>
+        <div class="matrix-card">
+          <div class="logo bubble ubuntu"></div>
+          <div>
+            <h3>Ubuntu / Pop!_OS</h3>
+            <p>22.04 LTS and 24.04 LTS verified. Install winetricks, Vulkan drivers, and enable multilib.</p>
+          </div>
+        </div>
+        <div class="matrix-card">
+          <div class="logo bubble fedora"></div>
+          <div>
+            <h3>Fedora Workstation</h3>
+            <p>Wayland-first; works with RPM Fusion drivers and DXVK. Use COPR for latest Wine if needed.</p>
+          </div>
+        </div>
+        <div class="matrix-card">
+          <div class="logo bubble debian"></div>
+          <div>
+            <h3>Debian</h3>
+            <p>Bookworm with backports for Mesa. Keep non-free firmware enabled for GPU stacks.</p>
+          </div>
+        </div>
+        <div class="matrix-card">
+          <div class="logo bubble nix"></div>
+          <div>
+            <h3>NixOS</h3>
+            <p>Flake-friendly; run inside FHS shell with Wine, DXVK, and Vulkan libs pinned.</p>
+          </div>
+        </div>
+        <div class="matrix-card">
+          <div class="logo bubble manjaro"></div>
+          <div>
+            <h3>Manjaro</h3>
+            <p>Prebuilt kernels and drivers make DXVK setup quick; uses Arch-compatible flow.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <p class="eyebrow">Trust & Credibility</p>
+        <h2>Tech stack badges.</h2>
+      </div>
+      <div class="badge-grid">
+        <div class="tech-badge wine">Wine 10.x</div>
+        <div class="tech-badge dxvk">DXVK</div>
+        <div class="tech-badge vkd3d">VKD3D</div>
+        <div class="tech-badge python">Python 3.10+</div>
+        <div class="tech-badge cli">Pure CLI</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <p class="eyebrow">Call to action</p>
+        <h2>Quick start visual guide.</h2>
+      </div>
+      <div class="infographic">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Clone</h3>
+            <p>Grab the repo and move in.</p>
+            <div class="mini-code">
+              <button class="copy-btn tiny" data-copy="git clone https://github.com/ind4skylivey/affinity-cli.git">Copy</button>
+              <code>git clone https://github.com/ind4skylivey/affinity-cli.git</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Prep venv</h3>
+            <p>Create and enter a virtual environment.</p>
+            <div class="mini-code">
+              <button class="copy-btn tiny" data-copy="python3 -m venv .venv && source .venv/bin/activate">Copy</button>
+              <code>python3 -m venv .venv && source .venv/bin/activate</code>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Install and run</h3>
+            <p>Install editable and launch installer.</p>
+            <div class="mini-code">
+              <button class="copy-btn tiny" data-copy="pip install -e . && affinity-cli install">Copy</button>
+              <code>pip install -e . && affinity-cli install</code>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="hero">
@@ -164,6 +274,40 @@ affinity-cli install</code></pre>
           <span class="pill">DXVK ready</span>
           <span class="pill">No root required for CLI</span>
         </div>
+      </div>
+    </section>
+
+    <section class="section trading">
+      <div class="section-header">
+        <p class="eyebrow">Feature deck</p>
+        <h2>Trading-card highlights.</h2>
+      </div>
+      <div class="trading-grid">
+        <article class="trading-card">
+          <div class="card-top">Guided Wine prep</div>
+          <p>Prefix creation with winetricks, Windows 11 target, fonts, crypto libs, and vcrun when needed.</p>
+          <div class="tag-row">
+            <span class="pill">64-bit</span>
+            <span class="pill">No root</span>
+          </div>
+        </article>
+        <article class="trading-card">
+          <div class="card-top">Profile selector</div>
+          <p>Switch between minimal, standard, and full stacks to match your GPU, time, and app needs.</p>
+          <div class="tag-row">
+            <span class="pill">DXVK</span>
+            <span class="pill">dotnet48</span>
+            <span class="pill">vkd3d</span>
+          </div>
+        </article>
+        <article class="trading-card">
+          <div class="card-top">Logged and scriptable</div>
+          <p>Non-interactive flow with explicit preflight checks and replayable logs that stay readable in dark terminals.</p>
+          <div class="tag-row">
+            <span class="pill">CI friendly</span>
+            <span class="pill">Debug logs</span>
+          </div>
+        </article>
       </div>
     </section>
 

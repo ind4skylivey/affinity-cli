@@ -382,6 +382,121 @@ main {
   box-shadow: var(--shadow);
 }
 
+.matrix {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.matrix-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  background: rgba(10, 17, 28, 0.85);
+  box-shadow: var(--shadow);
+}
+
+.matrix-card h3 { margin: 0 0 4px; font-family: var(--font-display); }
+.matrix-card p { margin: 0; color: var(--muted); line-height: 1.45; }
+
+.logo {
+  width: 54px;
+  height: 54px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: rgba(97, 231, 255, 0.12);
+}
+
+.bubble.arch { background: radial-gradient(circle at 30% 30%, #8be9fd, #1d7cf5); }
+.bubble.ubuntu { background: radial-gradient(circle at 40% 30%, #e95420, #b04116); }
+.bubble.fedora { background: radial-gradient(circle at 50% 40%, #51a2f3, #304bff); }
+.bubble.debian { background: radial-gradient(circle at 40% 40%, #d70a53, #6b1235); }
+.bubble.nix { background: radial-gradient(circle at 30% 30%, #7dd3ff, #2f6fab); }
+.bubble.manjaro { background: radial-gradient(circle at 30% 30%, #2ecc71, #0c6c3d); }
+
+.badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.tech-badge {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  text-align: center;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text);
+  box-shadow: var(--shadow);
+}
+
+.tech-badge.wine { background: linear-gradient(135deg, rgba(233, 80, 80, 0.16), rgba(92, 14, 14, 0.3)); }
+.tech-badge.dxvk { background: linear-gradient(135deg, rgba(124, 255, 107, 0.16), rgba(14, 92, 33, 0.3)); }
+.tech-badge.vkd3d { background: linear-gradient(135deg, rgba(97, 231, 255, 0.18), rgba(9, 58, 85, 0.28)); }
+.tech-badge.python { background: linear-gradient(135deg, rgba(255, 203, 72, 0.22), rgba(29, 39, 82, 0.28)); }
+.tech-badge.cli { background: linear-gradient(135deg, rgba(180, 180, 180, 0.18), rgba(40, 40, 40, 0.32)); }
+
+.infographic {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(11, 18, 30, 0.9);
+  box-shadow: var(--shadow);
+}
+
+.step h3 { margin: 0 0 4px; font-family: var(--font-display); }
+.step p { margin: 0 0 8px; color: var(--muted); }
+
+.step-num {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(124, 255, 107, 0.2), rgba(97, 231, 255, 0.18));
+  border: 1px solid var(--border);
+  font-weight: 700;
+}
+
+.mini-code {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #0b1323;
+  padding: 10px 10px 10px 12px;
+  font-family: var(--font-mono);
+  color: #e8f4ff;
+  overflow: hidden;
+}
+
+.copy-btn.tiny {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+
+.mini-code code { font-size: 13px; }
+
 .card.holo {
   background: var(--bg-holo);
   border-color: rgba(97, 231, 255, 0.45);
@@ -602,6 +717,38 @@ main {
   border-radius: var(--radius);
   padding: 20px;
   background: rgba(8, 14, 24, 0.85);
+}
+
+.trading-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.trading-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(97, 231, 255, 0.08), rgba(10, 18, 30, 0.9));
+  box-shadow: var(--shadow);
+}
+
+.trading-card .card-top {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.trading-card p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.tag-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .qa + .qa { margin-top: 14px; }
