@@ -88,11 +88,10 @@ main {
 .front-hero {
   position: relative;
   overflow: hidden;
-  min-height: 78vh;
+  min-height: 88vh;
   display: flex;
-  flex-direction: column;
+  align-items: flex-end;
   justify-content: center;
-  gap: 18px;
   padding: 36px;
   border: 1px solid rgba(255, 255, 255, 0.03);
   border-radius: 22px;
@@ -106,28 +105,29 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, rgba(5, 9, 14, 0.72), rgba(10, 20, 30, 0.62) 45%, rgba(7, 11, 20, 0.78));
+  background: linear-gradient(110deg, rgba(5, 9, 14, 0.82) 45%, rgba(5, 9, 14, 0.4) 60%, rgba(5, 9, 14, 0.2) 75%);
 }
 
 body.theme-light .front-hero::after {
-  background: linear-gradient(120deg, rgba(248, 251, 255, 0.72), rgba(241, 245, 255, 0.62) 45%, rgba(236, 244, 255, 0.78));
+  background: linear-gradient(110deg, rgba(248, 251, 255, 0.82) 45%, rgba(248, 251, 255, 0.55) 60%, rgba(248, 251, 255, 0.35) 75%);
 }
 
 .front-hero__content {
   position: relative;
   z-index: 1;
-  max-width: 760px;
-  padding: 18px 18px 14px;
-  border-radius: 16px;
-  background: rgba(5, 9, 14, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  max-width: 620px;
+  margin-right: clamp(24px, 8vw, 80px);
+  padding: 22px 22px 18px;
+  border-radius: 20px;
+  background: rgba(5, 9, 14, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 46px rgba(0, 0, 0, 0.42);
 }
 
 .theme-light .front-hero__content {
-  background: rgba(255, 255, 255, 0.72);
-  border-color: rgba(0, 0, 0, 0.04);
-  box-shadow: 0 12px 28px rgba(18, 42, 76, 0.22);
+  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 18px 40px rgba(18, 42, 76, 0.2);
 }
 
 .front-hero__content h1 {
