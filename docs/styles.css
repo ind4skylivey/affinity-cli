@@ -1,16 +1,16 @@
 :root {
   --bg-0: #080c14;
   --bg-1: #0f1a28;
-  --bg-card: rgba(16, 28, 44, 0.9);
+  --bg-card: rgba(13, 22, 36, 0.95);
   --bg-holo: linear-gradient(135deg, rgba(124, 255, 107, 0.18), rgba(97, 232, 255, 0.12) 40%, rgba(230, 0, 122, 0.12));
-  --surface-soft: rgba(20, 32, 46, 0.85);
+  --surface-soft: rgba(20, 32, 46, 0.9);
   --text: #eaf2ff;
   --muted: #a8b9d4;
   --accent: #8df574;
   --cyan: #76e9ff;
   --pink: #f36edc;
   --border: #234065;
-  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
   --radius: 18px;
   --font-display: "Chakra Petch", "Space Grotesk", system-ui, -apple-system, sans-serif;
   --font-body: "Space Grotesk", system-ui, -apple-system, sans-serif;
@@ -18,18 +18,18 @@
 }
 
 body.theme-light {
-  --bg-0: #f8fbff;
-  --bg-1: #f1f5ff;
-  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-0: #f2f7ff;
+  --bg-1: #e6efff;
+  --bg-card: rgba(255, 255, 255, 0.98);
   --bg-holo: linear-gradient(135deg, rgba(140, 190, 255, 0.25), rgba(247, 217, 255, 0.2));
-  --surface-soft: rgba(255, 255, 255, 0.85);
-  --text: #1c2533;
-  --muted: #4f5b73;
-  --accent: #4ac18b;
-  --cyan: #43b5ff;
-  --pink: #d567ff;
-  --border: #d6e2f5;
-  --shadow: 0 12px 36px rgba(18, 42, 76, 0.15);
+  --surface-soft: rgba(255, 255, 255, 0.95);
+  --text: #0b1221;
+  --muted: #404b63;
+  --accent: #2a9668;
+  --cyan: #007acc;
+  --pink: #b535e6;
+  --border: #cce0ff;
+  --shadow: 0 12px 36px rgba(18, 42, 76, 0.12);
 }
 
 * {
@@ -106,20 +106,20 @@ main {
   position: absolute;
   inset: 0;
   background: linear-gradient(100deg,
-    rgba(5, 9, 14, 0.92) 0%,
-    rgba(5, 9, 14, 0.88) 45%,
-    rgba(5, 9, 14, 0.55) 65%,
-    rgba(5, 9, 14, 0.40) 80%);
-  backdrop-filter: blur(2px);
+    rgba(5, 9, 14, 0.98) 0%,
+    rgba(5, 9, 14, 0.95) 45%,
+    rgba(5, 9, 14, 0.85) 65%,
+    rgba(5, 9, 14, 0.60) 80%);
+  backdrop-filter: blur(4px);
 }
 
 body.theme-light .front-hero::after {
   background: linear-gradient(100deg,
-    rgba(248, 251, 255, 0.94) 0%,
-    rgba(248, 251, 255, 0.88) 45%,
-    rgba(248, 251, 255, 0.62) 65%,
-    rgba(248, 251, 255, 0.42) 80%);
-  backdrop-filter: blur(2px);
+    rgba(242, 247, 255, 0.98) 0%,
+    rgba(242, 247, 255, 0.96) 45%,
+    rgba(242, 247, 255, 0.85) 65%,
+    rgba(242, 247, 255, 0.60) 80%);
+  backdrop-filter: blur(4px);
 }
 
 .front-hero__content {
@@ -129,14 +129,14 @@ body.theme-light .front-hero::after {
   margin-right: clamp(24px, 8vw, 80px);
   padding: 24px 26px 22px;
   border-radius: 22px;
-  background: rgba(5, 9, 14, 0.86);
+  background: rgba(5, 9, 14, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 24px 52px rgba(0, 0, 0, 0.48);
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(12px);
 }
 
 .theme-light .front-hero__content {
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.98);
   border-color: rgba(0, 0, 0, 0.08);
   box-shadow: 0 20px 48px rgba(18, 42, 76, 0.24);
 }
