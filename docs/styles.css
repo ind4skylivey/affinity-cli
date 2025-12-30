@@ -81,11 +81,9 @@ main {
   border: 1px solid var(--border);
   border-radius: 22px;
   background-image:
-    radial-gradient(circle at 20% 20%, rgba(124, 255, 107, 0.14), transparent 32%),
-    radial-gradient(circle at 85% 10%, rgba(97, 231, 255, 0.12), transparent 30%),
-    linear-gradient(135deg, rgba(6, 10, 18, 0.9), rgba(8, 16, 28, 0.75)),
+    linear-gradient(135deg, rgba(5, 9, 14, 0.55), rgba(10, 18, 30, 0.35)),
     url('assets/frontpage.png');
-  background-size: auto, auto, cover, cover;
+  background-size: cover, cover;
   background-position: center;
   box-shadow: var(--shadow);
 }
