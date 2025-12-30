@@ -21,15 +21,16 @@ body.theme-light {
   --bg-0: #f2f7ff;
   --bg-1: #e6efff;
   --bg-card: rgba(255, 255, 255, 0.98);
-  --bg-holo: linear-gradient(135deg, rgba(140, 190, 255, 0.25), rgba(247, 217, 255, 0.2));
+  --bg-card-solid: #ffffff;
+  --bg-holo: linear-gradient(135deg, rgba(0, 122, 204, 0.08), rgba(42, 150, 104, 0.06));
   --surface-soft: rgba(255, 255, 255, 0.95);
-  --text: #0b1221;
-  --muted: #404b63;
-  --accent: #2a9668;
-  --cyan: #007acc;
-  --pink: #b535e6;
-  --border: #cce0ff;
-  --shadow: 0 12px 36px rgba(18, 42, 76, 0.12);
+  --text: #0a1628;
+  --muted: #3d4a5c;
+  --accent: #1a8a5c;
+  --cyan: #0066aa;
+  --pink: #9920cc;
+  --border: #c4d6f0;
+  --shadow: 0 8px 32px rgba(18, 42, 76, 0.08);
 }
 
 * {
@@ -918,6 +919,126 @@ body.theme-light .topbar {
 .footer a:hover { color: var(--accent); }
 
 .muted { color: var(--muted); }
+
+/* ============================================
+   LIGHT THEME OVERRIDES
+   ============================================ */
+body.theme-light .matrix-card {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+body.theme-light .matrix-card h3 {
+  color: var(--text);
+}
+
+body.theme-light .profile-card {
+  background: var(--bg-card);
+}
+
+body.theme-light .profile-card.hot {
+  border-color: var(--accent);
+  box-shadow: 0 12px 40px rgba(26, 138, 92, 0.12);
+}
+
+body.theme-light .step {
+  background: var(--bg-card);
+}
+
+body.theme-light .step-num {
+  background: linear-gradient(135deg, rgba(26, 138, 92, 0.15), rgba(0, 102, 170, 0.12));
+}
+
+body.theme-light .stat {
+  background: var(--bg-card);
+}
+
+body.theme-light .faq {
+  background: var(--bg-card);
+}
+
+body.theme-light .trading-card {
+  background: var(--bg-card);
+}
+
+body.theme-light .feature-list li {
+  background: var(--bg-card);
+}
+
+body.theme-light .pill {
+  color: var(--cyan);
+  background: rgba(0, 102, 170, 0.08);
+  border-color: rgba(0, 102, 170, 0.25);
+}
+
+body.theme-light .tech-badge {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+body.theme-light .tech-badge.wine {
+  background: linear-gradient(135deg, rgba(233, 80, 80, 0.12), rgba(255, 255, 255, 0.9));
+}
+
+body.theme-light .tech-badge.dxvk {
+  background: linear-gradient(135deg, rgba(26, 138, 92, 0.12), rgba(255, 255, 255, 0.9));
+}
+
+body.theme-light .tech-badge.vkd3d {
+  background: linear-gradient(135deg, rgba(0, 102, 170, 0.12), rgba(255, 255, 255, 0.9));
+}
+
+body.theme-light .tech-badge.python {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.18), rgba(255, 255, 255, 0.9));
+}
+
+body.theme-light .tech-badge.cli {
+  background: linear-gradient(135deg, rgba(100, 100, 100, 0.12), rgba(255, 255, 255, 0.9));
+}
+
+body.theme-light .hero {
+  background: var(--bg-card);
+  border-color: var(--border);
+}
+
+body.theme-light .hero__panel {
+  background: #1a2332;
+  border-color: var(--border);
+}
+
+body.theme-light .panel-header {
+  background: #141c28;
+}
+
+body.theme-light .terminal {
+  background: radial-gradient(circle at 20% 20%, rgba(26, 138, 92, 0.08), transparent 40%), #1a2332;
+}
+
+body.theme-light .badge {
+  background: rgba(26, 138, 92, 0.08);
+  border-color: rgba(26, 138, 92, 0.2);
+}
+
+body.theme-light .card.holo {
+  background: var(--bg-holo);
+  border-color: rgba(0, 102, 170, 0.3);
+}
+
+body.theme-light .gradient-text {
+  background: linear-gradient(135deg, var(--accent), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.theme-light .eyebrow {
+  color: var(--cyan);
+}
+
+body.theme-light .logo {
+  background: rgba(0, 102, 170, 0.1);
+  border-color: var(--border);
+}
 
 /* ============================================
    SCROLL ANIMATIONS
